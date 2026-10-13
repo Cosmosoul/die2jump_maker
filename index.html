@@ -98,8 +98,8 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
 #typeBadge{display:inline-block;padding:3px 10px;border-radius:3px;font-size:12px;font-weight:bold;margin-bottom:8px;background:rgba(0,255,170,.15);color:#00ffaa}
 .slider-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:13px}
 .slider-row label{width:82px;color:#5a6a7a;flex-shrink:0;font-size:12px}
-.slider-row input[type=range]{flex:1;accent-color:#00ffaa;height:28px;cursor:pointer}
-.slider-row .slider-val{width:54px;text-align:right;color:#00ffaa;font-size:13px;font-variant-numeric:tabular-nums}
+.slider-row input[type=range]{flex:1;min-width:0;accent-color:#00ffaa;height:28px;cursor:pointer}
+.slider-row .slider-val{width:54px;flex:0 0 auto;text-align:right;color:#00ffaa;font-size:13px;font-variant-numeric:tabular-nums}
 #selectionBar{display:none;position:absolute;left:12px;right:12px;bottom:86px;height:54px;background:rgba(15,20,32,.96);border:1px solid #2a3a4a;border-radius:10px;padding:0 14px;z-index:8;align-items:center;gap:12px;box-shadow:0 6px 16px rgba(0,0,0,.6)}
 #selectionBar.show{display:flex}
 #selectionBar .sel-type{color:#00ffaa;font-weight:bold;font-size:14px;padding:4px 10px;border-radius:4px;background:rgba(0,255,170,.15);flex-shrink:0}
@@ -214,8 +214,23 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
 .modal-box .modal-hint{font-size:12px;color:#5a6a7a;line-height:1.6}
 .cam-row{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14px}
 .cam-row label{width:130px;color:#aac4d6}
-.cam-row input[type=range]{flex:1;accent-color:#00ffaa;height:34px}
+.cam-row input[type=range]{flex:1;min-width:0;accent-color:#00ffaa;height:34px}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:#131c2b;border:1px solid #2a3a4a;border-radius:4px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-top:-6px;border-radius:50%;background:#00ffaa;box-shadow:0 0 6px rgba(0,255,170,.55);cursor:pointer}
+input[type=range]::-moz-range-track{height:6px;background:#131c2b;border:1px solid #2a3a4a;border-radius:4px}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border:none;border-radius:50%;background:#00ffaa;cursor:pointer}
+input[type=range]{background:transparent;cursor:pointer;outline:none;accent-color:#00ffaa}
 .cam-row input[type=number]{width:86px;background:#0a0e1a;color:#00ffaa;border:1px solid #2a3a4a;border-radius:4px;padding:8px 10px;font-size:14px;text-align:right;outline:none}
+/* ===== 一键地形生成 模态框 ===== */
+#terrainGenModal .tg-box{max-width:560px}
+#terrainGenModal .cam-row input[type=range]{flex:1;min-width:0}
+#terrainGenModal .cam-row input[type=number]{width:86px}
+.tg-radios{display:flex;gap:14px;flex-wrap:wrap}
+.tg-radios label{display:flex;align-items:center;gap:6px;width:auto;color:#aac4d6;cursor:pointer;font-size:14px;user-select:none}
+.tg-checks{flex-direction:column;align-items:flex-start;gap:8px}
+.tg-checks label{display:flex;align-items:center;gap:8px;width:auto;color:#aac4d6;cursor:pointer}
+.tg-checks input[type=checkbox],.tg-radios input[type=radio]{-webkit-appearance:auto;appearance:auto;width:18px;height:18px;flex:0 0 auto;margin:0;accent-color:#00ffaa;cursor:pointer}
+.tg-dice{flex:0 0 auto;padding:8px 12px}
 @media (max-width:768px), (pointer:coarse) {
   /* ===== 手机端：试玩画面收进屏幕中上部的长方形画框 ===== */
   #playCanvasWrap{
@@ -325,6 +340,18 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
   #selectionBar{display:none !important}
   #propertySheet{display:none !important}
 }
+/* 下拉箭头：index.html:11 的全局 reset 有 appearance:none ⇒ 原生 ▼ 被抹掉，select 看起来像静态标签。
+   自绘一个（放在 <style> 最末尾 ⇒ 同特异度下覆盖前面的 background 简写）；padding-right 只加 14px，
+   ★不动 max-width★，避免影响手机端工具栏的紧凑布局。 */
+select,#levelSelect,.ins-row select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0h10L5 6z' fill='%235a6a7a'/></svg>");background-repeat:no-repeat;background-position:right 5px center;background-size:8px 5px;padding-right:14px}
+.ps-select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0h10L5 6z' fill='%235a6a7a'/></svg>");background-repeat:no-repeat;background-position:right 12px center;background-size:10px 6px;padding-right:32px}
+/* ===== 图层条：背景层级调整（◀ 更近 / ▶ 更远） ===== */
+#layerCtrl button.layer-mv{min-width:30px;padding:5px 6px;color:#5a6a7a;font-size:13px}
+#layerCtrl button.layer-mv:hover:not(:disabled){background:rgba(170,68,255,.16);color:#cc88ff;border-color:#aa44ff}
+#layerCtrl button.layer-mv:disabled{opacity:.28;cursor:not-allowed}
+@media (max-width:768px), (pointer:coarse) {
+  #layerCtrl button.layer-mv{min-width:40px;min-height:34px;font-size:15px}
+}
 </style>
 </head>
 <body>
@@ -347,6 +374,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
       <input type="number" id="lvFlags" min="0" max="9" value="0">
       <select id="chamberRef" title="扩展参考箱庭 / 背景画布"></select>
       <button class="tb-btn" id="btnCameraConfig"><span class="icon">📷</span><span class="text-opt">相机</span></button>
+      <button class="tb-btn" id="btnGenTerrain"><span class="icon">🏔</span><span class="text-opt">生成地形</span></button>
       <div class="right">
         <button class="tb-btn" id="btnUndo"><span class="icon">↶</span><span class="text-opt">撤销</span></button>
         <button class="tb-btn" id="btnRedo"><span class="icon">↷</span><span class="text-opt">重做</span></button>
@@ -454,16 +482,44 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
 <div class="modal-mask" id="cameraModal">
   <div class="modal-box">
     <h3>相机参数</h3>
-    <div class="cam-row"><label>左死区比例</label><input type="range" id="camXL" min="0.05" max="0.45" step="0.01" value="0.30"><input type="number" id="camXLN" min="0.05" max="0.45" step="0.01" value="0.30"></div>
-    <div class="cam-row"><label>右死区比例</label><input type="range" id="camXR" min="0.55" max="0.95" step="0.01" value="0.70"><input type="number" id="camXRN" min="0.55" max="0.95" step="0.01" value="0.70"></div>
+    <div class="cam-row"><label>左死区比例</label><input type="range" id="camXL" min="0.05" max="0.45" step="0.01" value="0.40"><input type="number" id="camXLN" min="0.05" max="0.45" step="0.01" value="0.40"></div>
+    <div class="cam-row"><label>右死区比例</label><input type="range" id="camXR" min="0.55" max="0.95" step="0.01" value="0.60"><input type="number" id="camXRN" min="0.55" max="0.95" step="0.01" value="0.60"></div>
     <div class="cam-row"><label>上死区比例</label><input type="range" id="camYT" min="0.05" max="0.45" step="0.01" value="0.32"><input type="number" id="camYTN" min="0.05" max="0.45" step="0.01" value="0.32"></div>
     <div class="cam-row"><label>下死区比例</label><input type="range" id="camYB" min="0.55" max="0.95" step="0.01" value="0.68"><input type="number" id="camYBN" min="0.55" max="0.95" step="0.01" value="0.68"></div>
-    <div class="cam-row"><label>视野宽度</label><input type="range" id="camVW" min="100" max="400" step="10" value="300"><input type="number" id="camVWN" min="100" max="400" step="10" value="300"></div>
-    <div class="cam-row"><label>视野高度</label><input type="range" id="camVH" min="80" max="300" step="10" value="100"><input type="number" id="camVHN" min="80" max="300" step="10" value="100"></div>
+    <div class="cam-row"><label>视野宽度</label><input type="range" id="camVW" min="100" max="400" step="10" value="400"><input type="number" id="camVWN" min="100" max="400" step="10" value="400"></div>
+    <div class="cam-row"><label>视野高度</label><input type="range" id="camVH" min="80" max="300" step="10" value="150"><input type="number" id="camVHN" min="80" max="300" step="10" value="150"></div>
     <div class="modal-actions">
       <button id="camReset">恢复默认</button>
       <button class="primary" id="camSave">保存</button>
       <button id="camCancel">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" id="terrainGenModal">
+  <div class="modal-box tg-box">
+    <h3>一键生成地形</h3>
+    <div class="modal-hint">只生成 <b>平台地形</b>（不含机关 / 敌人 / 水 / 装饰），生成后可直接拖动、缩放、删除、撤销。<br>⚠ 游戏里每关都必须有 <b>出生点</b> 与 <b>终点</b>，否则导出后该关会被跳过 —— 生成完请自行补放。</div>
+    <div class="cam-row"><label>长（列箱庭）</label><input type="range" id="tgW" min="1" max="12" step="1" value="4"><input type="number" id="tgWN" min="1" max="12" step="1" value="4"></div>
+    <div class="cam-row"><label>高（行箱庭）</label><input type="range" id="tgH" min="1" max="8" step="1" value="2"><input type="number" id="tgHN" min="1" max="8" step="1" value="2"></div>
+    <div class="cam-row"><label>地形风格</label>
+      <div class="tg-radios">
+        <label><input type="radio" name="tgStyle" value="cave">洞窟</label>
+        <label><input type="radio" name="tgStyle" value="hill" checked>山丘</label>
+        <label><input type="radio" name="tgStyle" value="tower">塔楼</label>
+        <label><input type="radio" name="tgStyle" value="mixed">混合</label>
+      </div>
+    </div>
+    <div class="cam-row"><label>随机种子</label><input type="number" id="tgSeed" min="0" max="99999999" step="1" value="12345"><button class="tb-btn tg-dice" id="tgDice">🎲</button></div>
+    <div class="cam-row tg-checks">
+      <label><input type="checkbox" id="tgWithBg" checked> 生成背景图层</label>
+      <label><input type="checkbox" id="tgClearFirst" checked> 清空当前关卡现有内容</label>
+      <label><input type="checkbox" id="tgWithSpawn"> 附带出生点（额外放 1 个 spawn）</label>
+    </div>
+    <div class="modal-hint" id="tgEst">预估：—</div>
+    <div class="modal-actions">
+      <button id="tgCancel">取消</button>
+      <button class="primary" id="tgGen">生成</button>
     </div>
   </div>
 </div>
@@ -573,6 +629,42 @@ var SHAPE_OPTIONS=[
   {id:'crescent',name:'月牙'},
   {id:'diamond',name:'菱形'}
 ];
+/* ★平台砖外形贴图（20 种）★：id/name 必须与 runtime 的 `_PLAT_STYLES` 严格一致 */
+var PLAT_STYLE_OPTIONS=[
+  {id:'default',name:'默认'},
+  {id:'hell',name:'地狱砖块'},
+  {id:'tech',name:'未来科技'},
+  {id:'moss',name:'青苔岩石'},
+  {id:'ruin',name:'破败红砖'},
+  {id:'neon',name:'霓虹电弧'},
+  {id:'jade',name:'翡翠矿脉'},
+  {id:'obsidian',name:'熔岩黑曜石'},
+  {id:'gold',name:'黄金神殿'},
+  {id:'brass',name:'机械黄铜'},
+  {id:'sand',name:'沙漠砂岩'},
+  {id:'mushroom',name:'菌菇林地'},
+  {id:'bone',name:'白骨墓穴'},
+  {id:'candy',name:'糖果乐园'},
+  {id:'steel',name:'工业钢板'},
+  {id:'bamboo',name:'竹林竹节'},
+  {id:'honey',name:'蜂巢蜜蜡'},
+  {id:'book',name:'古书典籍'},
+  {id:'coral',name:'珊瑚礁'},
+  {id:'checker',name:'幻境棋盘'}
+];
+/* ★BOSS 外形（10 种）★：id/name 必须与 runtime 的 `_BOSS_STYLES` 严格一致 */
+var BOSS_STYLE_OPTIONS=[
+  {id:'inferno',name:'炽炎魔君'},
+  {id:'abyss',name:'深渊魔眼'},
+  {id:'thunder',name:'雷霆领主'},
+  {id:'steel',name:'机械暴君'},
+  {id:'venom',name:'剧毒蟾王'},
+  {id:'pharaoh',name:'骷髅法老'},
+  {id:'magma',name:'熔岩巨兽'},
+  {id:'dream',name:'幻梦水母'},
+  {id:'thorn',name:'荆棘树妖'},
+  {id:'void',name:'虚空之主'}
+];
 /* === preset-shapes v1 === 追加 25 个像素预设图案 */
 var _PRESET_OPTIONS=[
   {id:'presetMountain',name:'山体'},
@@ -639,7 +731,7 @@ var SHADER_OPTIONS=[
 ];
 
 var TOOLS={
-  platform:{label:'平台',group:'结构',color:'#e0d0ff',desc:'普通实心平台。',defaults:{w:32,h:8},props:[{key:'w',label:'宽度',type:'number',min:4},{key:'h',label:'高度',type:'number',min:4}]},
+  platform:{label:'平台',group:'结构',color:'#e0d0ff',desc:'普通实心平台。可在属性面板里选择外形贴图风格。',defaults:{w:32,h:8,style:'default'},props:[{key:'w',label:'宽度',type:'number',min:4},{key:'h',label:'高度',type:'number',min:4},{key:'style',label:'外形贴图',type:'select',options:PLAT_STYLE_OPTIONS}]},
   disappear:{label:'消失台',group:'结构',color:'#6a6a8a',desc:'周期性出现，消失时可穿透。',defaults:{w:24,h:8,onTime:1.5,offTime:1.0,phase:0},props:[{key:'w',label:'宽度',type:'number',min:4},{key:'h',label:'高度',type:'number',min:3},{key:'onTime',label:'出现时长',type:'number',min:0.1,max:30,step:0.1},{key:'offTime',label:'消失时长',type:'number',min:0.1,max:30,step:0.1},{key:'phase',label:'初始相位',type:'number',min:0,max:30,step:0.1}]},
   gravityFlip:{label:'重力区',group:'结构',color:'#aa88ff',desc:'重力翻转区。',defaults:{w:64,h:48},props:[{key:'w',label:'宽度',type:'number',min:8},{key:'h',label:'高度',type:'number',min:8}]},
   spike:{label:'荆棘',group:'危险',color:'#ff3366',desc:'触碰即死。',defaults:{w:8,h:8},props:[{key:'w',label:'宽度',type:'number',min:4},{key:'h',label:'高度',type:'number',min:3}]},
@@ -675,7 +767,7 @@ var TOOLS={
   fire:{label:'火',group:'危险',color:'#ff7a1a',desc:'常驻致命火焰，不蔓延、不自行熄灭。玩家触碰即死；被带水的幽灵扑灭后消失，变为可通过区域。★把「出怪间隔」设为 >0 后，这团火会源源不断刷出火团怪（小人被火包裹、绕火缓慢游荡、碰到带水幽灵即死）★。',defaults:{w:8,h:8,flameColor:'#ff7a1a',spreadSpeed:1.0,douseRadius:24,spawnInterval:0,spawnMax:3,foeSpeed:0.5,foeWanderRadius:24},props:[{key:'w',label:'宽度',type:'number',min:4,max:64,step:2},{key:'h',label:'高度',type:'number',min:4,max:64,step:2},{key:'douseRadius',label:'扑灭距离',type:'number',min:8,max:200,step:2},{key:'flameColor',label:'火焰色',type:'color'},{key:'spreadSpeed',label:'跳动速率',type:'number',min:0.2,max:4,step:0.1},{key:'spawnInterval',label:'出怪间隔',type:'number',min:0,max:30,step:0.1},{key:'spawnMax',label:'同屏上限',type:'number',min:1,max:30,step:1},{key:'foeSpeed',label:'火团游速',type:'number',min:0.1,max:4,step:0.1},{key:'foeWanderRadius',label:'游荡半径',type:'number',min:4,max:200,step:2}]},
   grave:{label:'墓碑',group:'危险',color:'#9aa0a8',desc:'玩家或幽灵靠近即触发：墓碑碎裂消失，并从原地漂出一只苍白鬼魂。鬼魂不穿地形地追随玩家，进距离后发射子弹（中弹即死、扣 1 命），碰到玩家幽灵则死亡。触发过一次永久消失。',defaults:{w:8,h:8,triggerRadius:32,ghostSpeed:0.9,fireRange:64,fireCooldown:1.6,bulletSpeed:2.6},props:[{key:'w',label:'宽度',type:'number',min:4,max:64,step:1},{key:'h',label:'高度',type:'number',min:4,max:64,step:1},{key:'triggerRadius',label:'触发半径',type:'number',min:8,max:300,step:2},{key:'ghostSpeed',label:'鬼魂速度',type:'number',min:0.1,max:4,step:0.1},{key:'fireRange',label:'开火距离',type:'number',min:8,max:400,step:2},{key:'fireCooldown',label:'开火间隔',type:'number',min:0.2,max:10,step:0.1},{key:'bulletSpeed',label:'子弹速度',type:'number',min:0.5,max:12,step:0.1}]},
   skeleton:{label:'骷髅怪',group:'危险',color:'#e8e8f0',desc:'方块骷髅，左右两侧有尖刺。双状态机：玩家不在范围内时小范围左右巡视；进入范围后蓄力快速冲刺，冲到最大距离后眩晕。★只有眩晕期间可以跳到它头顶踩死★，其他时刻碰到即死。',defaults:{w:12,h:10,patrolRange:40,detectRange:88,chargeSpeed:5.2,chargeMaxDist:120,stunTime:2.2,deadTime:0.5},props:[{key:'w',label:'宽度',type:'number',min:8,max:64,step:1},{key:'h',label:'高度',type:'number',min:8,max:64,step:1},{key:'patrolRange',label:'巡视范围',type:'number',min:8,max:400,step:2},{key:'detectRange',label:'发现距离',type:'number',min:8,max:600,step:2},{key:'chargeSpeed',label:'冲刺速度',type:'number',min:0.5,max:20,step:0.1},{key:'chargeMaxDist',label:'冲刺距离',type:'number',min:16,max:800,step:2},{key:'stunTime',label:'眩晕时长',type:'number',min:0.2,max:10,step:0.1},{key:'deadTime',label:'碎裂时长',type:'number',min:0.1,max:4,step:0.1}]},
-  boss:{label:'BOSS',group:'机关',color:'#c02040',desc:'巨大恶魔上半身，停在原地。玩家走进「激活半径」即苏醒（编辑器里会用虚线圆直观显示该半径，正式游戏不显示）；离开一段时间后沉睡。苏醒前几乎全透明，苏醒过程约 2 秒渐变为完全不透明。按波次从摄像机顶部吐出尖刺/火球/激光弹幕（出屏即销毁）；弹幕以玩家为中心聚拢（散布倍率越小越集中），密度倍率可拉到几乎满屏；弹幕永远保留一条安全缝 ⇒ 可通关。底部有血条；在它包围盒旁边爆炸 1px 即扣 1 点血。每波结束掉一颗生命心到最近可站平台上并暂停 5~7 秒；全部波次打完后从第一波重来，直到打死。',defaults:{id:'',w:160,h:120,activeRadius:96,sleepDelay:4,maxHp:12,damageRadius:40,wavePauseMin:5,wavePauseMax:7,densityMul:1,aimMul:1},props:[{key:'id',label:'编号(与门绑定)',type:'text'},{key:'w',label:'宽度',type:'number',min:32,max:600,step:4},{key:'h',label:'高度',type:'number',min:32,max:600,step:4},{key:'activeRadius',label:'激活半径',type:'number',min:16,max:800,step:4},{key:'sleepDelay',label:'沉睡延迟(秒)',type:'number',min:0.5,max:60,step:0.5},{key:'maxHp',label:'最大血量',type:'number',min:1,max:999,step:1},{key:'damageRadius',label:'受击半径',type:'number',min:8,max:400,step:2},{key:'densityMul',label:'弹幕密度倍率',type:'number',min:0.2,max:8,step:0.1},{key:'aimMul',label:'瞄准散布倍率',type:'number',min:0.2,max:2,step:0.05},{key:'wavePauseMin',label:'波间暂停下限(秒)',type:'number',min:1,max:30,step:0.5},{key:'wavePauseMax',label:'波间暂停上限(秒)',type:'number',min:1,max:30,step:0.5}]},
+  boss:{label:'BOSS',group:'机关',color:'#c02040',desc:'巨大恶魔上半身，停在原地。玩家走进「激活半径」即苏醒（编辑器里会用虚线圆直观显示该半径，正式游戏不显示）；离开一段时间后沉睡。苏醒前几乎全透明，苏醒过程约 2 秒渐变为完全不透明。按波次从摄像机顶部吐出尖刺/火球/激光弹幕（出屏即销毁）；弹幕以玩家为中心聚拢（散布倍率越小越集中），密度倍率可拉到几乎满屏；弹幕永远保留一条安全缝 ⇒ 可通关。底部有血条；在它包围盒旁边爆炸 1px 即扣 1 点血。每波结束掉一颗生命心到最近可站平台上并暂停 5~7 秒；全部波次打完后从第一波重来，直到打死。',defaults:{id:'',w:160,h:120,activeRadius:96,sleepDelay:4,maxHp:12,damageRadius:40,wavePauseMin:5,wavePauseMax:7,densityMul:1,aimMul:1,style:'inferno'},props:[{key:'id',label:'编号(与门绑定)',type:'text'},{key:'w',label:'宽度',type:'number',min:32,max:600,step:4},{key:'h',label:'高度',type:'number',min:32,max:600,step:4},{key:'activeRadius',label:'激活半径',type:'number',min:16,max:800,step:4},{key:'sleepDelay',label:'沉睡延迟(秒)',type:'number',min:0.5,max:60,step:0.5},{key:'maxHp',label:'最大血量',type:'number',min:1,max:999,step:1},{key:'damageRadius',label:'受击半径',type:'number',min:8,max:400,step:2},{key:'densityMul',label:'弹幕密度倍率',type:'number',min:0.2,max:8,step:0.1},{key:'aimMul',label:'瞄准散布倍率',type:'number',min:0.2,max:2,step:0.05},{key:'wavePauseMin',label:'波间暂停下限(秒)',type:'number',min:1,max:30,step:0.5},{key:'wavePauseMax',label:'波间暂停上限(秒)',type:'number',min:1,max:30,step:0.5},{key:'style',label:'BOSS外形',type:'select',options:BOSS_STYLE_OPTIONS}]},
   bossDoor:{label:'BOSS门',group:'机关',color:'#c02040',desc:'与指定编号的 BOSS 绑定：BOSS 醒来时关闭（挡路），BOSS 死亡或未激活时打开。把「绑定编号」留空表示跟随本关唯一的 BOSS；填了但本关没有同编号 BOSS 时恒开（防止配错编号把玩家锁死）。',defaults:{w:8,h:64,bossId:'',orientation:'v'},props:[{key:'w',label:'宽度',type:'number',min:4,max:64,step:1},{key:'h',label:'高度',type:'number',min:8,max:400,step:2},{key:'bossId',label:'绑定编号',type:'text'},{key:'orientation',label:'朝向',type:'select',options:[{id:'v',name:'竖向'},{id:'h',name:'横向'}]}]},
   portal:{label:'传送门',group:'标记',color:'#7a5aff',desc:'只传送幽灵、不传送玩家。玩家照常走过（门非固体）；幽灵回放到入口会被整体挪到同 link 的出口，并继续播放剩余动作。配对：入口 role=in + 出口 role=out 且 link 相同。',defaults:{w:16,h:24,link:'A',role:'in',color:'#7a5aff'},props:[{key:'w',label:'宽度',type:'number',min:8,max:120,step:2},{key:'h',label:'高度',type:'number',min:8,max:160,step:2},{key:'link',label:'配对ID',type:'text'},{key:'role',label:'角色',type:'select',options:[{id:'in',name:'入口'},{id:'out',name:'出口'}]},{key:'color',label:'颜色',type:'color'}]},
   bgCanvas:{label:'背景画布',group:'背景',color:'#aa44ff',desc:'背景画布，可拼接多块。几何图形会画在画布上并被画布裁剪。',defaults:{w:400,h:300},props:[{key:'w',label:'宽度',type:'number',min:8},{key:'h',label:'高度',type:'number',min:8}]},
@@ -738,6 +830,7 @@ function init(){
   bindFeelTouchControls();
   bindPropertySheet();
   bindCameraModal();
+  bindTerrainModal();
   // select 增强：点击前确保选中项居中
   (function enhanceSelects(){
     var sels=document.querySelectorAll('select');
@@ -766,7 +859,7 @@ function cacheDom(){
    'playFreeLookHint','editPage','feelPage','editTools','feelTools',
    'feelMoveRows','feelJumpRows','feelAirRows','feelTouchControls',
    'selectionBar','propertySheet','psTitle','psBody','psClose','psDup','psDelete',
-   'lvLives','lvFlags','chamberRef','layerList','chamberCtrlLbl'].forEach(function(k){D[k]=document.getElementById(k);});
+   'lvLives','lvFlags','chamberRef','layerList','chamberCtrlLbl','layerCtrl'].forEach(function(k){D[k]=document.getElementById(k);});
   canvas=D.canvas;ctx=canvas.getContext('2d');
 }
 function detectMobile(){IS_MOBILE=window.innerWidth<769||IS_TOUCH;}
@@ -777,7 +870,7 @@ function makeEmptyLevel(id){
     chambers:[{id:'c1',x:0,y:0,w:CHAMBER_W,h:CHAMBER_H}],
     elements:[],initialLives:3,initialFlags:0,
     backgrounds:[],
-    camera:{deadZoneXLeft:0.30,deadZoneXRight:0.70,deadZoneYTop:0.32,deadZoneYBottom:0.68,viewW:300,viewH:100}
+    camera:{deadZoneXLeft:0.40,deadZoneXRight:0.60,deadZoneYTop:0.32,deadZoneYBottom:0.68,viewW:400,viewH:150}
   };
 }
 
@@ -929,6 +1022,13 @@ function rebuildLayerList(){
   });
   html+='<button data-action="add" class="layer-add">＋ 新层</button>';
   if(Ed.currentLayer!=='game'){
+    /* ★改层级★：把当前背景层往「更近 / 更远」挪一格。
+       箭头方向与按钮排列一致：列表从左到右 = 从近到远。 */
+    var _ci=-1;
+    for(var _k=0;_k<sorted.length;_k++)if('bg:'+sorted[_k].id===Ed.currentLayer){_ci=_k;break;}
+    var _atNear=(_ci===0), _atFar=(_ci===sorted.length-1);
+    html+='<button data-move="1" class="layer-mv" title="更靠近镜头（后绘制、覆盖其它背景层）"'+(_atNear?' disabled':'')+'>◀</button>';
+    html+='<button data-move="-1" class="layer-mv" title="更远离镜头（先绘制、被覆盖）"'+(_atFar?' disabled':'')+'>▶</button>';
     html+='<button data-action="del" class="layer-del">✕ 删本层</button>';
   }
   D.layerList.innerHTML=html;
@@ -937,6 +1037,8 @@ function rebuildLayerList(){
       var action=btn.getAttribute('data-action');
       if(action==='add'){addBackgroundLayer();return;}
       if(action==='del'){delCurrentBackgroundLayer();return;}
+      var mv=btn.getAttribute('data-move');
+      if(mv){moveCurrentBgLayer(parseInt(mv,10));return;}
       var newLayer=btn.getAttribute('data-layer');
       if(newLayer===Ed.currentLayer)return;
       Ed.currentLayer=newLayer;
@@ -959,7 +1061,9 @@ function addBackgroundLayer(){
   var maxLayer=-1;
   lv.backgrounds.forEach(function(bg){if((bg.layer||0)>maxLayer)maxLayer=bg.layer||0;});
   var newLayer=maxLayer+1;
-  var id='bg_'+Date.now().toString(36).slice(-5);
+  /* id 必须唯一：Date.now() 的 base36 后 5 位分辨率约 16 小时，
+     快速连点「新建背景层」会撞 id（撞了之后按 id 定位的排序/删除会错层）。 */
+  var id,_n=0;do{id='bg_'+Date.now().toString(36).slice(-5)+(_n?'_'+_n:'');_n++;}while(lv.backgrounds.some(function(x){return x.id===id;}));
   lv.backgrounds.push({
     id:id,
     layer:newLayer,
@@ -986,6 +1090,7 @@ function delCurrentBackgroundLayer(){
   if(!confirm('删除当前背景层？（其中的画布和图形都会一起删除）'))return;
   pushUndo();
   lv.backgrounds.splice(idx,1);
+  renumberBgLayers();
   Ed.currentLayer='game';
   Ed.selection=[];
   Ed._lastLayerSig=null;
@@ -1003,6 +1108,50 @@ function getLayerSignature(){
   return lv.backgrounds.map(function(bg){return bg.id+':'+(bg.layer||0)+':'+((bg.shapes||[]).length)+':'+((bg.chambers||[]).length);}).join('|');
 }
 
+/* ============ 背景图层：层级调整 ============ */
+/* 绘制顺序 = layer 升序（与 runtime.js / 编辑器 render() / 缩略图烘焙三处完全一致），
+   所以「改层级」就是改 layer 值。
+   实现：按 layer 升序取序列 → 与相邻交换 → 重新编号 layer=0..n-1（连续无洞）。
+   ★数组本身顺序不动，只改 layer 字段★，
+   否则会影响 getCurrentBgIndex() / addBackgroundLayer() 等按下标工作的代码。
+   dir>0 = 更靠近镜头（后绘制）；dir<0 = 更远。 */
+function moveBgLayer(id,dir){
+  var lv=Ed.levels[Ed.currentIdx];if(!lv)return;
+  var bgs=lv.backgrounds||[];
+  if(bgs.length<2)return;
+  var asc=bgs.slice().sort(function(a,b){return (a.layer||0)-(b.layer||0);});
+  var i=-1;
+  for(var k=0;k<asc.length;k++){if(asc[k].id===id){i=k;break;}}
+  if(i<0)return;
+  var j=dir>0?i+1:i-1;
+  if(j<0||j>=asc.length){toast(dir>0?'已经是最靠近镜头的背景层':'已经是最远的背景层');return;}
+  pushUndo();
+  var t=asc[i];asc[i]=asc[j];asc[j]=t;
+  assignLayersInOrder(asc);
+  Ed._lastLayerSig=null;
+  rebuildLayerList();
+  updateCounts();
+  toast('背景层已'+(dir>0?'移近':'移远')+' → L'+asc[j].layer);
+}
+/* 图层条按钮用：移动当前选中的那一层 */
+function moveCurrentBgLayer(dir){
+  if(Ed.currentLayer==='game')return;
+  moveBgLayer(Ed.currentLayer.slice(3),dir);
+}
+/* 按「调用方给定的顺序」把 layer 重写成 0..n-1（本函数**不排序**）。
+   数组本身顺序不动，只改 layer 字段 —— 别动下标，否则 getCurrentBgIndex() 等会错。 */
+function assignLayersInOrder(list){
+  list.forEach(function(bg,i){bg.layer=i;});
+}
+/* 删除背景层之后用：按现有 layer 升序保序，重编号成连续 0..n-1
+   （否则删掉 L0 会留下 L1/L2/L3，视差/雾化 layer/max 也跟着错位）。
+   ★这里必须先排序★ —— 与「移动」不同：移动时交换完数组、layer 值还停留在旧顺序上，
+   若在这里排序就会把刚换好的顺序原样还原（踩过这个坑）。 */
+function renumberBgLayers(){
+  var lv=Ed.levels[Ed.currentIdx];
+  if(!lv||!lv.backgrounds)return;
+  assignLayersInOrder(lv.backgrounds.slice().sort(function(a,b){return (a.layer||0)-(b.layer||0);}));
+}
 /* ============ 关卡管理 ============ */
 function refreshLevelSelect(){
   D.levelSelect.innerHTML='';
@@ -1217,6 +1366,7 @@ function bindEvents(){
   document.getElementById('btnAddDown').onclick=function(){addChamber('down');};
   document.getElementById('btnDelChamber').onclick=delChamber;
   document.getElementById('btnCameraConfig').onclick=openCameraModal;
+  document.getElementById('btnGenTerrain').onclick=openTerrainModal;
   document.querySelectorAll('.tab').forEach(function(tab){tab.onclick=function(){switchPage(tab.getAttribute('data-page'));};});
   document.addEventListener('keydown',onKeyDown);
   document.addEventListener('keyup',onKeyUp);
@@ -1867,27 +2017,29 @@ function bindCameraModal(){
 /* ============ 编辑操作 ============ */
 function pushUndo(){
   var lv=Ed.levels[Ed.currentIdx];if(!lv)return;
-  Ed.undoStack.push(JSON.stringify({elements:lv.elements,backgrounds:lv.backgrounds||[]}));
+  Ed.undoStack.push(JSON.stringify({elements:lv.elements,backgrounds:lv.backgrounds||[],chambers:lv.chambers||[]}));
   if(Ed.undoStack.length>100)Ed.undoStack.shift();
   Ed.redoStack=[];
 }
 function undo(){
   if(!Ed.undoStack.length)return;
   var lv=Ed.levels[Ed.currentIdx];
-  Ed.redoStack.push(JSON.stringify({elements:lv.elements,backgrounds:lv.backgrounds||[]}));
+  Ed.redoStack.push(JSON.stringify({elements:lv.elements,backgrounds:lv.backgrounds||[],chambers:lv.chambers||[]}));
   var snap=JSON.parse(Ed.undoStack.pop());
   lv.elements=snap.elements||[];
   lv.backgrounds=snap.backgrounds||[];
+  if(snap.chambers)lv.chambers=snap.chambers;   /* 旧快照无此字段 ⇒ 保持现状（向后兼容） */
   Ed.selection=[];Ed._lastLayerSig=null;
   rebuildLayerList();updateInspector();updateCounts();
 }
 function redo(){
   if(!Ed.redoStack.length)return;
   var lv=Ed.levels[Ed.currentIdx];
-  Ed.undoStack.push(JSON.stringify({elements:lv.elements,backgrounds:lv.backgrounds||[]}));
+  Ed.undoStack.push(JSON.stringify({elements:lv.elements,backgrounds:lv.backgrounds||[],chambers:lv.chambers||[]}));
   var snap=JSON.parse(Ed.redoStack.pop());
   lv.elements=snap.elements||[];
   lv.backgrounds=snap.backgrounds||[];
+  if(snap.chambers)lv.chambers=snap.chambers;   /* 旧快照无此字段 ⇒ 保持现状（向后兼容） */
   Ed.selection=[];Ed._lastLayerSig=null;
   rebuildLayerList();updateInspector();updateCounts();
 }
@@ -2037,8 +2189,446 @@ function updateCounts(){
 }
 function toast(msg){
   D.toast.textContent=msg;D.toast.classList.add('show');
+  /* ★图层条在画布左上角，背景层多时会换行变高★ ⇒ 固定 top:70px 会被它压住（文字叠文字）。
+     这里按图层条实际底边把 toast 挪到它下方；图层条不可见（非编辑页 / 隐藏）时回落到 CSS 默认位置。 */
+  var lc=D.layerCtrl, r=(lc&&lc.offsetParent)?lc.getBoundingClientRect():null;
+  D.toast.style.top=(r&&r.height>0)?Math.round(r.bottom+8)+'px':'';
   clearTimeout(D.toast._t);
   D.toast._t=setTimeout(function(){D.toast.classList.remove('show');},1400);
+}
+
+/* ============ 一键地形生成（★仅编辑器★） ============
+   ★严格边界（改前必读）★
+     · 只产出 {type:'platform'} 与标准 backgrounds 层 ⇒ 渲染 / 属性面板 / 撤销 / 试玩 / 导出
+       全链路**零适配**，不引入任何新元素类型或私有字段。
+     · 不改 runtime.js / game.js / mobile/ / package.py / levels.js 数据结构。
+     · 全程用**格坐标**（1 格 = 8px = Ed.grid），只在最后一步 ×8 转像素 ⇒ 天然对齐网格。
+   设计依据：docs/编辑器地形生成功能开发方案.md
+   ★明确不做★：不生成机关 / 敌人 / 水 / 装饰 / 标记（唯一例外：可选的 1 个 spawn）。
+
+   ★v3 修订（用户反馈：「全是碎块压根不是连续的」「边界没围起来玩家会掉出去」）★
+     v2 把「薄」做到了极致，但代价是**地面被房间边界 + 随机坑切成一截一截**，
+     而且**世界四周没有任何围挡** ⇒ 玩家能从左右/下方掉出世界。
+     v3 = **连续地面 + 全封闭边框**：
+       ① `tgPaintFrame`：世界四周一圈 **2 格厚**的边框（上/下/左/右全封）⇒ 玩家掉不出去；
+       ② `tgPaintFloors`：每个箱庭一行铺**一整条连续地面**（1~2 格厚，逐列 ±1 起伏，
+          ★没有随机坑★），每层只留 **1~2 个 3~4 格宽的上下出入口**（楼梯井，可跳过去）
+          ⇒ 层间连通，其余部分连续、整体基本封死；最下面一行的地面 = 边框底（不再单独铺）；
+       ③ `tgAddSkyPlatforms`：1 格厚浮空平台，把相邻两层地面按 `gap/(n+1)` 均匀分档
+          ⇒ 每级 ≤5 格（玩家上跳上限），必然可攀爬；
+       ④ `tgHealReachability` 自愈补 1 格厚薄板。
+     ⇒ 岩体厚度集中在 1~2 格（边框 2 格；≥3 格厚层 0 段），且**地形连续、边界封闭**。
+        ★层间净空 ≥ TG_MIN_ROOM=8 格（64px）> 实测满跳上升 54.31px ⇒ 每次跳跃都不碰头★ */
+var TG_CELL = 8;                       // 1 格 = 8px
+var TG_CW = 25, TG_CH = 11;            // 每箱庭 25×11 格（= CHAMBER_W/8 × CHAMBER_H/8）
+var TG_UP_DY = 5, TG_UP_DX = 7, TG_DOWN_DY = 9; // 可达性保守值（宁可低估玩家能力）
+var TG_MAX_PLATFORMS = 4000;
+var TG_FRAME = 2;                      // ★世界边框厚度★（上/下/左/右全封，玩家掉不出去）
+var TG_FLOOR_MAX = 2;                  // 地面最大厚度（1~2 格）——见 TG_MIN_ROOM 的预算推导
+/* ★层间净空下限（格）★ —— 用户要求「每层高度比单次跳跃最高高度高不少，确保每次跳跃都不碰头」。
+   实测（_jump_real_lab，正式引擎）：原地满按跳上升 54.31px = 6.79 格；玩家高 8px = 1 格。
+   ⇒ 只要「站定脚底 → 天花板底」净空 ≥ 8 格（64px），任何一次满跳都碰不到头。
+   预算：箱庭高 TG_CH=11 格 = 上下边框各 2 格 + 本层地面 ≤2 格 + 净空 ≥8 格 = 2+2+8 = 12 > 11
+   ⇒ 边框只吃 2 格、地面压到 ≤2 格时，相邻两箱庭分摊下来正好够 8 格净空（见 tgPaintFloors 的钳制）。 */
+var TG_MIN_ROOM = 8;
+
+/* 可复现种子 RNG（mulberry32） */
+function tgRng(seed) {
+  var a = seed >>> 0;
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function tgRi(rng, a, b) { return a + Math.floor(rng() * (b - a + 1)); }
+function tgClamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+
+/* ---- ① 尺寸 → 箱庭网格 ---- */
+function tgBuildChambers(M, N) {
+  var cs = [];
+  for (var r = 0; r < N; r++) for (var c = 0; c < M; c++) {
+    cs.push({ id: 'g_r' + r + 'c' + c, x: c * CHAMBER_W, y: r * CHAMBER_H, w: CHAMBER_W, h: CHAMBER_H });
+  }
+  return cs;   // 行优先，chambers[0] 在左上
+}
+
+/* ---- ② 每箱庭一行的地面基准高度 ---- */
+function tgLayout(M, N, rng) {
+  var rows = [];
+  for (var r = 0; r < N; r++) {
+    rows.push({ r: r, F: r * TG_CH + tgRi(rng, 7, 10) });
+  }
+  return { M: M, N: N, rows: rows };
+}
+
+/* ---- ③ 世界边框（★全封闭★：上/下/左/右各 TG_FRAME 格厚） ---- */
+function tgPaintFrame(bm, GW, GH) {
+  var F = TG_FRAME;
+  for (var y = 0; y < GH; y++) {
+    for (var x = 0; x < GW; x++) {
+      if (x < F || x >= GW - F || y < F || y >= GH - F) bm[y * GW + x] = 1;
+    }
+  }
+}
+
+/* ---- ④ 连续地面：每箱庭一行一条，1~2 格厚，逐列 ±1 起伏；每层留 1~2 个上下出入口 ----
+   ★不再有随机坑★（v2 的坑 + 房间边界缺口正是「碎块」的来源）。
+   ★每层只开 1~2 个「楼梯井」★（宽 3~4 格 ≤ 上跳 dx 7）⇒ 层间连通，但整体基本封死。
+   返回 gF[r*GW+x] = 该列地面顶行（-1 = 该行没有独立地面，用边框底）。 */
+function tgPaintFloors(bm, GW, GH, plan, rng) {
+  var gF = new Int16Array(plan.N * GW); gF.fill(-1);
+  var F = TG_FRAME, xa = F, xb = GW - F;
+  var nF = plan.N - 1;                            // 内部地面层数（最下一行由边框底当地面）
+  /* ── 先定每层厚度 ── */
+  var fts = [];
+  for (var t0 = 0; t0 < nF; t0++) fts.push(rng() < 0.62 ? 1 : 2);   // ★1~2 格薄层★
+  /* ── 从下往上算「每层地面顶行」的上界 hi[r]，保证：
+        · 本层与下一层之间净空 ≥ TG_MIN_ROOM
+        · 末层与底边框之间净空 ≥ TG_MIN_ROOM
+     净空预算：GH = 上边框 2 + 下边框 2 + Σ地面厚度 + Σ净空 ⇒ N≥2 时 ft≤2 必然放得下 8 格净空；
+     N=1（只有一个箱庭高）时几何上最多 7 格，仍 > 实测满跳 6.79 格。 */
+  var hi = new Array(nF), lim = GH - F - TG_MIN_ROOM;   // 底边框顶行 = 最后一道天花板
+  for (var t1 = nF - 1; t1 >= 0; t1--) { hi[t1] = lim - fts[t1]; lim = hi[t1] - TG_MIN_ROOM; }
+  for (var r = 0; r < nF; r++) {
+    var rm = plan.rows[r];
+    var ft = fts[r];
+    var cur = 0, next = tgRi(rng, 8, 14);
+    var prevFt = r > 0 ? fts[r - 1] : 0;
+    var yHi = Math.min(GH - F - ft, hi[r]);       // 不能压到边框底，也不能挤掉下方净空
+    for (var x = xa; x < xb; x++) {
+      if (x > xa && --next <= 0) { cur += (rng() < 0.5 ? -1 : 1); cur = tgClamp(cur, -1, 1); next = tgRi(rng, 8, 14); }
+      var y0 = tgClamp(rm.F + cur, F + 3, yHi);
+      /* ★净空下限★：与「上方最近实心底行」之间至少 TG_MIN_ROOM 格。
+         r=0 时上方是顶边框（底行 F-1）⇒ y0 ≥ F + TG_MIN_ROOM；
+         否则是上一层地面底行 gF[r-1]+prevFt-1 ⇒ y0 ≥ gF[r-1] + prevFt + TG_MIN_ROOM。 */
+      var yMin = (r > 0) ? (gF[(r - 1) * GW + x] + prevFt + TG_MIN_ROOM) : (F + TG_MIN_ROOM);
+      if (y0 < yMin) y0 = yMin;
+      if (y0 > yHi) y0 = Math.max(yMin, yHi);     // 极端下界优先（宁可挤 1 格也不越界）
+      gF[r * GW + x] = y0;
+      for (var k = 0; k < ft; k++) { var y = y0 + k; if (y < GH) bm[y * GW + x] = 1; }
+    }
+    /* ★每层 1~2 个上下出入口（楼梯井）★：宽 3~4 格（≤ 上跳 dx 7 ⇒ 可跳过），
+       两个开口互不重叠、彼此至少隔 (w+4) 格；其余部分保持连续 ⇒「整体基本封死、只留出入口」。 */
+    var nOpen = rng() < 0.55 ? 1 : 2;
+    var oX = [], oW = [];
+    for (var o = 0; o < nOpen; o++) {
+      var ow = tgRi(rng, 3, 4);
+      var lo = xa + 3, hi = Math.max(lo, xb - 3 - ow);
+      var ox = -1;
+      for (var t = 0; t < 24; t++) {
+        var cand = tgRi(rng, lo, hi), okD = true;
+        for (var q = 0; q < oX.length; q++) {
+          if (Math.abs(cand - oX[q]) < Math.max(ow, oW[q]) + 4) { okD = false; break; }
+        }
+        if (okD) { ox = cand; break; }
+      }
+      if (ox < 0) break;                            // 放不下第 2 个 ⇒ 本层只留 1 个
+      oX.push(ox); oW.push(ow);
+      for (var ox2 = ox; ox2 < ox + ow && ox2 < xb; ox2++) {
+        var fy = gF[r * GW + ox2]; if (fy < 0) continue;
+        for (var k2 = 0; k2 < ft; k2++) { var yy = fy + k2; if (yy < GH) bm[yy * GW + ox2] = 0; }
+      }
+    }
+  }
+  return gF;
+}
+
+/* ---- ⑤ 浮空平台：1 格厚，把相邻两层地面串成 ≤5 格的攀爬梯级 ---- */
+function tgAddSkyPlatforms(bm, GW, GH, plan, style, rng, gF) {
+  var perRoom = style === 'hill' ? 3 : (style === 'cave' ? 1 : (style === 'tower' ? 3 : 2));
+  var F = TG_FRAME;
+  /* 层列表：从下到上 [边框底, F_{N-2}, …, F_0] */
+  var levels = [{ r: -1, F: GH - F }];
+  for (var r = plan.N - 2; r >= 0; r--) levels.push({ r: r, F: plan.rows[r].F });
+  var levelTop = function (lv, x) {
+    if (lv.r >= 0) { var v = gF[lv.r * GW + x]; if (v >= 0) return v; }
+    return lv.F;
+  };
+  for (var i = 0; i < levels.length - 1; i++) {
+    var low = levels[i], high = levels[i + 1];
+    /* 每 12 列一段 ⇒ 段内地面高度接近，梯级按 gap/(n+1) 均匀分档 ⇒ 每级 ≤5 格 */
+    for (var x0 = F; x0 < GW - F; x0 += 12) {
+      var x1 = Math.min(x0 + 12, GW - F);
+      var xm = (x0 + x1) >> 1;
+      var bot = levelTop(low, xm), top = levelTop(high, xm);
+      var gap = bot - top - 1;
+      if (gap < 6) continue;
+      var n = tgClamp(Math.ceil(gap / 4.5) - 1, 1, 3);
+      for (var j = 1; j <= n; j++) {
+        var y = bot - Math.round(gap * j / (n + 1));
+        if (y < F + 1 || y > GH - F - 2) continue;
+        var pw = tgRi(rng, 4, 9);
+        var px = tgClamp(xm - (pw >> 1) + tgRi(rng, -2, 2), F, GW - F - pw);
+        if (px < F) px = F;
+        for (var x2 = px; x2 < px + pw && x2 < GW - F; x2++) bm[y * GW + x2] = 1;
+      }
+    }
+  }
+  /* 散布平台：在空档里补 1~3 块 1 格厚浮空平台（只增加落脚点，不影响可达性） */
+  for (var r2 = 0; r2 < plan.N; r2++) {
+    var base = r2 < plan.N - 1 ? plan.rows[r2].F : (GH - F);
+    var extra = tgRi(rng, 1, perRoom);
+    for (var e = 0; e < extra; e++) {
+      var ey = base - tgRi(rng, 3, 9); if (ey < F + 1 || ey > GH - F - 2) continue;
+      var ew = tgRi(rng, 3, 7);
+      var ex = tgClamp(tgRi(rng, F, Math.max(F, GW - F - ew)), F, Math.max(F, GW - F - ew));
+      for (var ex2 = ex; ex2 < ex + ew && ex2 < GW - F; ex2++) bm[ey * GW + ex2] = 1;
+    }
+  }
+}
+
+/* ---- ⑥ 可达性自检 + 自愈（最多 4 轮） ---- */
+function tgStandGrid(bm, GW, GH) {
+  var st = new Uint8Array(GW * GH);
+  for (var y = 1; y < GH; y++) for (var x = 0; x < GW; x++) {
+    if (bm[y * GW + x] && !bm[(y - 1) * GW + x]) st[y * GW + x] = 1;
+  }
+  return st;
+}
+/* 几何可达性 BFS：上跳 dy≤5&dx≤7，下落 dy≤9，±1 台阶双向可走 */
+function tgReachBFS(bm, GW, GH, start) {
+  var st = tgStandGrid(bm, GW, GH);
+  var seen = new Uint8Array(GW * GH);
+  var q = [start.y * GW + start.x];
+  seen[q[0]] = 1;
+  var head = 0, reachList = [];
+  while (head < q.length) {
+    var i = q[head++];
+    var x = i % GW, y = (i - x) / GW;
+    reachList.push([x, y]);
+    for (var dy = -TG_UP_DY; dy <= TG_DOWN_DY; dy++) {
+      for (var dx = -TG_UP_DX; dx <= TG_UP_DX; dx++) {
+        if (dy === 0 && dx === 0) continue;
+        var nx = x + dx, ny = y + dy;
+        if (nx < 0 || nx >= GW || ny < 0 || ny >= GH) continue;
+        var ni = ny * GW + nx;
+        if (!st[ni] || seen[ni]) continue;
+        seen[ni] = 1; q.push(ni);
+      }
+    }
+  }
+  /* 未达的站立格，按 4 邻接聚成连通块 */
+  var comps = [], compOf = new Uint8Array(GW * GH);
+  for (var yy = 0; yy < GH; yy++) for (var xx = 0; xx < GW; xx++) {
+    var ii = yy * GW + xx;
+    if (!st[ii] || seen[ii] || compOf[ii]) continue;
+    var cells = [], cq = [ii]; compOf[ii] = 1;
+    while (cq.length) {
+      var j = cq.pop(), jx = j % GW, jy = (j - jx) / GW;
+      cells.push([jx, jy]);
+      var nb = [[jx - 1, jy], [jx + 1, jy], [jx, jy - 1], [jx, jy + 1]];
+      for (var k = 0; k < 4; k++) {
+        var ax = nb[k][0], ay = nb[k][1];
+        if (ax < 0 || ax >= GW || ay < 0 || ay >= GH) continue;
+        var ai = ay * GW + ax;
+        if (!st[ai] || seen[ai] || compOf[ai]) continue;
+        compOf[ai] = 1; cq.push(ai);
+      }
+    }
+    comps.push(cells);
+  }
+  return { st: st, seen: seen, reach: reachList, comps: comps, total: reachList.length };
+}
+function tgHealReachability(bm, GW, GH, start, maxRounds) {
+  var rounds = 0;
+  for (; rounds < maxRounds; rounds++) {
+    var res = tgReachBFS(bm, GW, GH, start);
+    if (!res.comps.length) return { rounds: rounds, left: 0 };
+    /* 取最大孤岛 → 找最近的可达站立格 → 补一块落脚平台（1 格厚薄板）连过去 */
+    var comp = res.comps[0];
+    for (var i = 1; i < res.comps.length; i++) if (res.comps[i].length > comp.length) comp = res.comps[i];
+    var from = comp[0], best = null, bd = 1e9;
+    for (var k = 0; k < res.reach.length; k++) {
+      var d = Math.abs(res.reach[k][0] - from[0]) + Math.abs(res.reach[k][1] - from[1]);
+      if (d < bd) { bd = d; best = res.reach[k]; }
+    }
+    if (!best) break;
+    /* ★补薄板而不是挖隧道★ —— 保持「只叠薄板、不产厚岩体」的一致观感 */
+    var bx = tgClamp(Math.round((from[0] + best[0]) / 2), TG_FRAME, GW - TG_FRAME - 4);
+    var by = tgClamp(Math.round((from[1] + best[1]) / 2), TG_FRAME + 1, GH - TG_FRAME - 2);
+    for (var w2 = 0; w2 < 4; w2++) { var xx2 = bx + w2; if (xx2 < GW - TG_FRAME) bm[by * GW + xx2] = 1; }
+  }
+  var last = tgReachBFS(bm, GW, GH, start);
+  return { rounds: rounds, left: last.comps.length };
+}
+
+/* ---- ⑦ ★bitmap → 平台矩形（贪心网格合并）★ 决定元素数与编辑器流畅度 ---- */
+function tgBitmapToRects(bm, GW, GH) {
+  var used = new Uint8Array(GW * GH), rects = [];
+  for (var gy = 0; gy < GH; gy++) for (var gx = 0; gx < GW; gx++) {
+    var i = gy * GW + gx;
+    if (!bm[i] || used[i]) continue;
+    var w = 1;
+    while (gx + w < GW && bm[i + w] && !used[i + w]) w++;
+    var h = 1;
+    for (; gy + h < GH; h++) {
+      var rowBase = (gy + h) * GW + gx, ok = true;
+      for (var k = 0; k < w; k++) if (!bm[rowBase + k] || used[rowBase + k]) { ok = false; break; }
+      if (!ok) break;
+    }
+    for (var yy = 0; yy < h; yy++) for (var xx = 0; xx < w; xx++) used[(gy + yy) * GW + gx + xx] = 1;
+    rects.push({ type: 'platform', x: gx * TG_CELL, y: gy * TG_CELL, w: w * TG_CELL, h: h * TG_CELL });
+  }
+  return rects;
+}
+
+/* ---- ⑧ 背景层（1 层、无视差） ---- */
+var TG_BG_PRESET = {
+  cave: { color: '#16233f', color2: '#070b16', shader: 'lavaLamp', shapes: ['blob', 'crystal', 'arch', 'hexagon'] },
+  hill: { color: '#1a2440', color2: '#0a0e1a', shader: 'moonMist', shapes: ['mountainPath', 'arch', 'blob', 'crescent'] },
+  tower: { color: '#141a33', color2: '#080b18', shader: 'starfield', shapes: ['spike', 'hexagon', 'ring', 'diamond'] },
+  mixed: { color: '#181f3a', color2: '#090d1a', shader: 'nebulaDrift', shapes: ['blob', 'crystal', 'star', 'waveBand'] }
+};
+function tgBuildBackground(M, N, style, rng) {
+  var pre = TG_BG_PRESET[style] || TG_BG_PRESET.mixed;
+  var bg = { id: 'bg_' + Date.now().toString(36).slice(-5), layer: 1, chambers: [], shapes: [] };
+  for (var r = 0; r < N; r++) for (var c = 0; c < M; c++) {
+    bg.chambers.push({ type: 'bgCanvas', id: 'bc_r' + r + 'c' + c, x: c * BG_CHAMBER_W, y: r * BG_CHAMBER_H, w: BG_CHAMBER_W, h: BG_CHAMBER_H });
+  }
+  bg.chambers.forEach(function (bc) {
+    var n = tgRi(rng, 3, 6);
+    for (var i = 0; i < n; i++) {
+      var w = tgRi(rng, 80, 220), h = tgRi(rng, 60, 180);
+      bg.shapes.push({
+        type: 'bgShape', chamberId: bc.id,
+        x: bc.x + tgRi(rng, 0, Math.max(0, BG_CHAMBER_W - w)),
+        y: bc.y + tgRi(rng, 0, Math.max(0, BG_CHAMBER_H - h)),
+        w: w, h: h,
+        shape: pre.shapes[tgRi(rng, 0, pre.shapes.length - 1)],
+        shader: pre.shader,
+        color: pre.color, color2: pre.color2,
+        glowColor: '#ffffff', glowIntensity: 0, alpha: 0.85,
+        rotation: tgRi(rng, 0, 359), points: tgRi(rng, 5, 8), speed: +(0.5 + rng()).toFixed(2),
+        sat: 1, contrast: 1, brightness: 1, vibrancy: 1, grayscale: 0
+      });
+    }
+  });
+  return bg;
+}
+
+/* ---- ⑨ 主入口 ---- */
+function tgGenerate(opts) {
+  var M = tgClamp(opts.M | 0, 1, 12), N = tgClamp(opts.N | 0, 1, 8);
+  var style = opts.style || 'mixed';
+  var rng = tgRng(opts.seed >>> 0);
+  var GW = M * TG_CW, GH = N * TG_CH;
+  var bm = new Uint8Array(GW * GH);                      // 全空气开始
+
+  tgPaintFrame(bm, GW, GH);                              // ★全封闭边框★
+  var plan = tgLayout(M, N, rng);
+  var gF = tgPaintFloors(bm, GW, GH, plan, rng);         // 连续地面
+  tgAddSkyPlatforms(bm, GW, GH, plan, style, rng, gF);
+
+  /* 出生格：chambers[0]（左上箱庭）里最低的站立格（跳过左边框） */
+  var start = null;
+  for (var y = TG_CH - 1; y >= 0 && !start; y--) {
+    for (var x = TG_FRAME; x < TG_CW; x++) {
+      if (bm[y * GW + x] && y > 0 && !bm[(y - 1) * GW + x]) { start = { x: x, y: y }; break; }
+    }
+  }
+  if (!start) start = { x: TG_FRAME, y: TG_FRAME + 1 };
+  var heal = tgHealReachability(bm, GW, GH, start, 4);
+
+  var rects = tgBitmapToRects(bm, GW, GH);
+  return {
+    ok: rects.length <= TG_MAX_PLATFORMS,
+    reason: rects.length > TG_MAX_PLATFORMS ? 'too_many' : '',
+    M: M, N: N, style: style, GW: GW, GH: GH,
+    chambers: tgBuildChambers(M, N),
+    platforms: rects,
+    spawn: { x: start.x * TG_CELL, y: (start.y - 1) * TG_CELL },   // 站在地面「上方」一格（start 是实心地面行）
+    background: opts.withBg ? tgBuildBackground(M, N, style, rng) : null,
+    healRounds: heal.rounds, healLeft: heal.left
+  };
+}
+
+/* ============ 地形生成 UI ============ */
+function tgStyleChecked() {
+  var r = document.querySelector('input[name="tgStyle"]:checked');
+  return r ? r.value : 'mixed';
+}
+function tgReadOpts() {
+  var M = tgClamp(parseInt(document.getElementById('tgW').value, 10) || 4, 1, 12);
+  var N = tgClamp(parseInt(document.getElementById('tgH').value, 10) || 2, 1, 8);
+  var seed = parseInt(document.getElementById('tgSeed').value, 10);
+  if (!isFinite(seed)) seed = 12345;
+  return {
+    M: M, N: N, style: tgStyleChecked(), seed: seed >>> 0,
+    withBg: document.getElementById('tgWithBg').checked,
+    clearFirst: document.getElementById('tgClearFirst').checked,
+    withSpawn: document.getElementById('tgWithSpawn').checked
+  };
+}
+function tgUpdateEst() {
+  var o = tgReadOpts();
+  /* 每箱庭 ≈ 4 段连续地面 + 4 块浮空平台 + 边框（实测偏差 < 2×） */
+  var per = o.style === 'tower' ? 9.5 : (o.style === 'cave' ? 7.0 : 8.5);
+  var est = Math.max(6, Math.round(o.M * o.N * per));
+  var el = document.getElementById('tgEst');
+  if (el) el.textContent = '预估：约 ' + est + ' 个平台元素（上限 ' + TG_MAX_PLATFORMS + '）；每箱庭 ' + CHAMBER_W + '×' + CHAMBER_H + ' px';
+}
+function openTerrainModal() {
+  var lv = Ed.levels[Ed.currentIdx]; if (!lv) return;
+  ['tgW', 'tgH'].forEach(function (id) {
+    var r = document.getElementById(id), n = document.getElementById(id + 'N');
+    if (!r || !n) return;
+    r.oninput = function () { n.value = r.value; tgUpdateEst(); };
+    n.oninput = function () { r.value = n.value; tgUpdateEst(); };
+  });
+  document.querySelectorAll('input[name="tgStyle"]').forEach(function (r) { r.onchange = tgUpdateEst; });
+  ['tgWithBg', 'tgClearFirst', 'tgWithSpawn'].forEach(function (id) {
+    var c = document.getElementById(id); if (c) c.onchange = tgUpdateEst;
+  });
+  var sd = document.getElementById('tgSeed');
+  if (sd) sd.oninput = tgUpdateEst;
+  tgUpdateEst();
+  document.getElementById('terrainGenModal').classList.add('show');
+}
+function bindTerrainModal() {
+  var dice = document.getElementById('tgDice');
+  if (dice) dice.onclick = function () {
+    document.getElementById('tgSeed').value = Math.floor(Math.random() * 100000000);
+    tgUpdateEst();
+  };
+  var cancel = document.getElementById('tgCancel');
+  if (cancel) cancel.onclick = function () { document.getElementById('terrainGenModal').classList.remove('show'); };
+  var gen = document.getElementById('tgGen');
+  if (gen) gen.onclick = tgRun;
+}
+function tgRun() {
+  var o = tgReadOpts();
+  var lv = Ed.levels[Ed.currentIdx]; if (!lv) return;
+  var t0 = (window.performance && performance.now) ? performance.now() : Date.now();
+  var res = tgGenerate(o);
+  var dt = ((window.performance && performance.now) ? performance.now() : Date.now()) - t0;
+
+  if (!res.ok) { toast('地形过大：' + res.platforms.length + ' 个平台 > 上限 ' + TG_MAX_PLATFORMS + '，请减小尺寸或换种子'); return; }
+
+  pushUndo();                                   // ★必须在改数据之前★（可一键撤销）
+  lv.chambers = res.chambers;
+  lv.elements = (o.clearFirst ? [] : lv.elements).concat(res.platforms);
+  if (res.background) {
+    lv.backgrounds = o.clearFirst ? [res.background] : (lv.backgrounds || []).concat([res.background]);
+  } else if (o.clearFirst) {
+    lv.backgrounds = [];
+  }
+  if (o.withSpawn) lv.elements.push({ type: 'spawn', x: res.spawn.x, y: res.spawn.y });
+
+  Ed.chamberRefIdx = lv.chambers.length - 1;
+  Ed.currentBgChamberRef = 0;
+  Ed.currentLayer = 'game';
+  Ed.selection = [];
+  Ed._lastLayerSig = null;
+  refreshChamberRef();
+  rebuildLayerList();
+  buildPalette();
+  D.chamberCtrlLbl.textContent = '箱庭';
+  updateInspector(); updateCounts();
+  fitZoom();
+  document.getElementById('terrainGenModal').classList.remove('show');
+  toast('已生成 ' + o.M + '×' + o.N + ' 箱庭地形（' + res.platforms.length + ' 个平台，' + Math.round(dt) + 'ms）');
 }
 
 /* ============ 文件 ============ */
@@ -2210,15 +2800,20 @@ function openFile(){
 /* ============ 相邻检测 ============ */
 function getAdjacency(el,list){
   var eps=1.5;var r={up:false,down:false,left:false,right:false};
+  /* ★平台砖外形★：仅当 el 是平台时，额外记录四邻块的 `style` 原始值
+     （undefined = 该侧无邻块）⇒ 供 `_platSeamPass` 判断"异贴图接缝"。
+     ★只在 platform 上挂新键★：其他类型（门/活动块/冰/泡沫…）的 adj 结构一字不变。 */
+  var _isPlat=(el.type==='platform');
+  if(_isPlat){r.sL=undefined;r.sR=undefined;r.sU=undefined;r.sD=undefined;}
   var elW=el.w||8,elH=el.h||8;var elR=el.x+elW,elB=el.y+elH;
   for(var i=0;i<list.length;i++){
     var o=list[i];if(o===el)continue;
     if(o.type!==undefined&&el.type!==undefined&&o.type!==el.type)continue;
     var oW=o.w||8,oH=o.h||8;var oR=o.x+oW,oB=o.y+oH;
     var yOverlap=o.y<elB-0.1&&oB>el.y+0.1;
-    if(yOverlap){if(Math.abs(el.x-oR)<eps)r.left=true;if(Math.abs(o.x-elR)<eps)r.right=true;}
+    if(yOverlap){if(Math.abs(el.x-oR)<eps){r.left=true;if(_isPlat)r.sL=o.style;}if(Math.abs(o.x-elR)<eps){r.right=true;if(_isPlat)r.sR=o.style;}}
     var xOverlap=o.x<elR-0.1&&oR>el.x+0.1;
-    if(xOverlap){if(Math.abs(el.y-oB)<eps)r.up=true;if(Math.abs(o.y-elB)<eps)r.down=true;}
+    if(xOverlap){if(Math.abs(el.y-oB)<eps){r.up=true;if(_isPlat)r.sU=o.style;}if(Math.abs(o.y-elB)<eps){r.down=true;if(_isPlat)r.sD=o.style;}}
   }
   return r;
 }
@@ -5813,6 +6408,8 @@ function _bktTile(mat){
   cv.width = _BKT; cv.height = _BKT;
   var g = cv.getContext('2d');
   g.imageSmoothingEnabled = false;
+  /* ★平台砖风格贴图★：自定义绘制（`_paint` 由 `_PLAT_STYLE_MATS` 注入） */
+  if (mat._paint){ mat._paint(g, _BKT); _bktTileCache[mat.id] = cv; return cv; }
   g.fillStyle = mat.base;
   g.fillRect(0, 0, _BKT, _BKT);
   var s = mat.seed * 1.37, n = Math.round((mat.specks || 10) * 2.4);
@@ -5861,6 +6458,472 @@ function _blkFill(g, mat, x, y, w, h){
   }
   g.imageSmoothingEnabled = sm;
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   ★平台砖「外形贴图」系统（20 种）★
+   ---------------------------------------------------------------------
+   用户原话：「为平台砖在编辑器属性设置里内置风格贴图，可在下拉框里直接框选；
+   平台贴在一起时的贴图融合（同贴图完全无缝、异贴图接缝处颜色渐变近似无缝）」。
+   实现口径：
+     · 每个平台元素带 `style` 字段（id 字符串，缺省 = 'default'）。
+     · 贴图仍走**世界坐标锚定**的 32px tile（`_blkFill`），⇒ 同贴图连排天然逐像素无缝。
+     · 异贴图相接：在接缝处叠一条 14px 的**连续混色**渐变带，并**裁剪到本块矩形内**
+       ⇒ 两侧各画自己那一半，两块拼起来正好是一条完整渐变，且与绘制顺序无关。
+     · 性能：渐变带只在"邻块存在且风格不同"时才创建；同风格连排零开销。
+   ★新增函数一律以 `_px*` 前缀命名，避免与既有 `_px/_pxDot` 冲突。★ */
+function _pxDisc(g,cx,cy,r,c){
+  g.fillStyle=c;
+  for(var y=-r;y<=r;y++){
+    var hw=Math.round(Math.sqrt(Math.max(0,r*r-y*y)));
+    g.fillRect(cx-hw,cy+y,hw*2+1,1);
+  }
+}
+function _pxTri(g,ax,ay,bx,by,cx,cy,color){
+  var ys=Math.min(ay,by,cy), ye=Math.max(ay,by,cy);
+  function ex(x0,y0,x1,y1,y){ if(y0===y1) return x0; return x0+(x1-x0)*(y-y0)/(y1-y0); }
+  g.fillStyle=color;
+  for(var y=Math.floor(ys);y<=Math.ceil(ye);y++){
+    var xs=[];
+    if(y>=Math.min(ay,by)&&y<=Math.max(ay,by)) xs.push(ex(ax,ay,bx,by,y));
+    if(y>=Math.min(by,cy)&&y<=Math.max(by,cy)) xs.push(ex(bx,by,cx,cy,y));
+    if(y>=Math.min(cy,ay)&&y<=Math.max(cy,ay)) xs.push(ex(cx,cy,ax,ay,y));
+    if(xs.length<2) continue;
+    var x0=Math.round(Math.min.apply(null,xs)), x1=Math.round(Math.max.apply(null,xs));
+    g.fillRect(x0,y,Math.max(1,x1-x0+1),1);
+  }
+}
+function _pxLine(g,x0,y0,x1,y1,color){
+  x0=Math.round(x0); y0=Math.round(y0); x1=Math.round(x1); y1=Math.round(y1);
+  var dx=Math.abs(x1-x0), dy=Math.abs(y1-y0), sx=x0<x1?1:-1, sy=y0<y1?1:-1, err=dx-dy;
+  g.fillStyle=color;
+  for(;;){ g.fillRect(x0,y0,1,1); if(x0===x1&&y0===y1) break;
+    var e2=2*err; if(e2>-dy){err-=dy;x0+=sx;} if(e2<dx){err+=dx;y0+=sy;} }
+}
+/* 散点颗粒（阈值 t 默认 0.62，与 `_bktTile` 的材质颗粒口径一致） */
+function _pxSpeckle(g,T,o){
+  var n=Math.round((o.n||60)), t=(o.t==null?0.62:o.t);
+  for(var i=0;i<n;i++){
+    var a=_pr(o.seed*3.1+i*7.3), b=_pr(o.seed*5.7+i*11.9), c=_pr(o.seed*9.3+i*4.1);
+    g.fillStyle=(c>t)?o.hi:o.lo;
+    g.fillRect(Math.floor(a*T),Math.floor(b*T),1,1);
+  }
+}
+/* 砖块铺排：行高 rh、行间错位半砖、1px 灰缝；可选破损/裂纹/逐砖花纹 */
+function _pxBricks(g,T,o){
+  var rh=o.rh||8, bw=o.bw||16;
+  g.fillStyle=o.mortar; g.fillRect(0,0,T,T);
+  for(var r=0;r<Math.ceil(T/rh);r++){
+    var y=r*rh, off=(r%2)?Math.floor(bw/2):0;
+    for(var x=-bw;x<T+bw;x+=bw){
+      var bx=x+off;
+      g.fillStyle=o.brick;   g.fillRect(bx+1,y+1,bw-2,rh-2);
+      g.fillStyle=o.brickHi; g.fillRect(bx+1,y+1,bw-2,1);
+      g.fillStyle=o.brickLo; g.fillRect(bx+1,y+rh-2,bw-2,1);
+      if(o.motif) o.motif(g,bx+1,y+1,bw-2,rh-2,r,bx,bw);
+    }
+  }
+  if(o.damage){
+    for(var i=0;i<o.damage;i++){
+      var a=Math.floor(_pr(o.seed+i*3.7)*T), b=Math.floor(_pr(o.seed*2.3+i*7.1)*T);
+      var w2=1+Math.floor(_pr(o.seed*5.1+i*2.9)*3), h2=1+Math.floor(_pr(o.seed*9.7+i*4.3)*2);
+      g.fillStyle=o.mortar; g.fillRect(a,b,w2,h2);
+      g.fillStyle=o.brickLo; g.fillRect(a,b,w2,1);
+    }
+  }
+  if(o.cracks){
+    for(var k=0;k<o.cracks;k++){
+      var cx=Math.floor(_pr(o.seed*11.3+k*5.5)*T), cy=Math.floor(_pr(o.seed*13.7+k*8.1)*T);
+      for(var s=0;s<4;s++){ g.fillStyle=o.crackColor||'rgba(0,0,0,0.45)'; g.fillRect(cx+((s%2)?1:0),cy+s,1,1); }
+    }
+  }
+}
+/* 面板网格（金属板倒角） */
+function _pxPanels(g,T,o){
+  var c=o.cell||16;
+  g.fillStyle=o.base; g.fillRect(0,0,T,T);
+  for(var y=0;y<T;y+=c) for(var x=0;x<T;x+=c){
+    g.fillStyle=o.seam; g.fillRect(x,y,c,1); g.fillRect(x,y,1,c);
+    g.fillStyle=o.hi;   g.fillRect(x+1,y+1,c-1,1); g.fillRect(x+1,y+1,1,c-1);
+    g.fillStyle=o.lo;   g.fillRect(x+1,y+c-1,c-1,1); g.fillRect(x+c-1,y+1,1,c-1);
+    if(o.dot){ g.fillStyle=o.dot; g.fillRect(x+2,y+2,1,1); g.fillRect(x+c-3,y+c-3,1,1); }
+  }
+}
+
+/* ── 20 种风格：{id,name,light,light2,mid,dark,dark2,paint(g,T)} ── */
+var _PLAT_STYLES = [
+  { id:'default', name:'默认', light:'#93889f', light2:'#746c8a', mid:'#5c5574', dark:'#2b2638', dark2:'#1e1a29',
+    paint:function(g,T){ g.fillStyle='#4d4760'; g.fillRect(0,0,T,T);
+      _pxSpeckle(g,T,{n:26,seed:1.37,hi:'#615a78',lo:'#3b3649'}); } },
+
+  { id:'hell', name:'地狱砖块', light:'#8a4a32', light2:'#66301f', mid:'#3d1f1a', dark:'#150808', dark2:'#0d0404',
+    paint:function(g,T){
+      _pxBricks(g,T,{rh:8,bw:16,mortar:'#1a0c0c',brick:'#3a1c18',brickHi:'#4d2519',brickLo:'#241110',
+        seed:2.1,damage:7,cracks:5,crackColor:'rgba(255,106,26,0.85)'});
+      for(var y=0;y<T;y+=8){ g.fillStyle='rgba(255,120,30,0.55)'; g.fillRect(0,y+7,T,1); }
+      for(var i=0;i<10;i++){
+        var x=Math.floor(_pr(3.7+i*5.1)*T), y2=Math.floor(_pr(7.3+i*3.9)*T);
+        g.fillStyle='#ffb347'; g.fillRect(x,y2,1,1);
+        g.fillStyle='rgba(255,90,20,0.7)'; g.fillRect(x+1,y2,1,1); g.fillRect(x,y2+1,1,1);
+      } } },
+
+  { id:'tech', name:'未来科技', light:'#8ceaff', light2:'#4fb8d8', mid:'#2b4353', dark:'#0b1319', dark2:'#060b0f',
+    paint:function(g,T){
+      _pxPanels(g,T,{cell:16,base:'#24333f',seam:'#0e161d',hi:'#3c586c',lo:'#131d26',dot:'#4fb8d8'});
+      var lines=[[2,6,13,6,13,12],[20,2,20,9,26,9],[4,22,4,29,12,29],[18,18,29,18,29,26]];
+      for(var i=0;i<lines.length;i++){
+        var p=lines[i];
+        for(var s=0;s<p.length-2;s+=2){
+          var x0=p[s],y0=p[s+1],x1=p[s+2],y1=p[s+3];
+          if(x0===x1){ for(var y=Math.min(y0,y1);y<=Math.max(y0,y1);y++) _pxDot(g,x0,y,'#3fd2e8'); }
+          else       { for(var x=Math.min(x0,x1);x<=Math.max(x0,x1);x++) _pxDot(g,x,y0,'#3fd2e8'); }
+        }
+      }
+      [[13,12],[26,9],[12,29],[29,26],[2,6],[20,2],[4,22],[18,18]].forEach(function(n){
+        _pxDot(g,n[0],n[1],'#c9f7ff'); });
+    } },
+
+  { id:'moss', name:'青苔岩石', light:'#a6b39a', light2:'#87947c', mid:'#5f6a55', dark:'#2f3529', dark2:'#1f2419',
+    paint:function(g,T){
+      g.fillStyle='#5c6355'; g.fillRect(0,0,T,T);
+      for(var i=0;i<16;i++){
+        var a=Math.floor(_pr(1.9+i*4.7)*T), b=Math.floor(_pr(3.3+i*6.1)*T);
+        var w=2+Math.floor(_pr(5.7+i*2.3)*6), h=2+Math.floor(_pr(7.1+i*3.1)*4);
+        g.fillStyle=(i%3===0)?'#6b7365':'#525a4c'; g.fillRect(a,b,w,h);
+        g.fillStyle='#3f4638'; g.fillRect(a,b+h-1,w,1); g.fillRect(a+w-1,b,1,h);
+        g.fillStyle='#7c8871'; g.fillRect(a,b,w,1);
+      }
+      _pxSpeckle(g,T,{n:30,seed:4.4,hi:'#87947c',lo:'#3f4638'});
+      for(var m=0;m<46;m++){
+        var mx=Math.floor(_pr(11.1+m*3.7)*T);
+        var my=Math.floor(Math.pow(_pr(13.7+m*5.3),1.9)*T*0.85);
+        var c=_pr(17.3+m*2.1);
+        g.fillStyle=(c>0.72)?'#8fc45e':(c>0.4?'#5f9a3e':'#3f6b2a');
+        g.fillRect(mx,my,1,1);
+        if(c>0.85) g.fillRect(mx,my+1,1,1);
+      } } },
+
+  { id:'ruin', name:'破败红砖', light:'#cf7f66', light2:'#b0604a', mid:'#8a3b2e', dark:'#4a1c14', dark2:'#2e100c',
+    paint:function(g,T){
+      _pxBricks(g,T,{rh:8,bw:16,mortar:'#6b5145',brick:'#a04836',brickHi:'#b85a44',brickLo:'#7d3527',
+        seed:5.3,damage:14,cracks:8,crackColor:'rgba(40,16,10,0.6)',
+        motif:function(g,bx,by,bw,bh){
+          if(_pr(bx*0.31+by*0.77)>0.55){ g.fillStyle='rgba(60,24,16,0.20)'; g.fillRect(bx,by,bw,bh); }
+        }});
+      for(var i=0;i<5;i++){
+        var a=Math.floor(_pr(19.3+i*6.7)*T), b=Math.floor(_pr(23.1+i*4.3)*T);
+        g.fillStyle='#2e100c'; g.fillRect(a,b,3,2);
+        g.fillStyle='#6b5145'; g.fillRect(a,b-1,3,1);
+      } } },
+
+  { id:'neon', name:'霓虹电弧', light:'#ff7ade', light2:'#b06aff', mid:'#3a2560', dark:'#0d0620', dark2:'#070312',
+    paint:function(g,T){
+      _pxPanels(g,T,{cell:16,base:'#241640',seam:'#120a26',hi:'#40295f',lo:'#150d28'});
+      var arcs=[[0,0,1,1],[32,32,-1,-1],[32,0,-1,1],[0,32,1,-1]];
+      for(var i=0;i<arcs.length;i++){
+        var a=arcs[i];
+        for(var t=0;t<=14;t++){
+          var ang=t/14*Math.PI/2;
+          var x=Math.round(a[0]+a[2]*Math.cos(ang)*14), y=Math.round(a[1]+a[3]*Math.sin(ang)*14);
+          var c=(i%2===0)?'#ff5fd2':'#4de3ff';
+          _pxDot(g,x,y,c);
+          if(t%5===0){ _pxDot(g,x,y+1,c); _pxDot(g,x+1,y,c); }
+        }
+      }
+      for(var k=0;k<7;k++){
+        var gx=Math.floor(_pr(29.1+k*5.9)*T), gy=Math.floor(_pr(31.7+k*3.3)*T);
+        _pxDot(g,gx,gy,'#ffffff'); _pxDot(g,gx+1,gy,'rgba(255,95,210,0.6)');
+      } } },
+
+    { id:'jade', name:'翡翠矿脉', light:'#c9f7dd', light2:'#93e3b7', mid:'#2f8a5e', dark:'#0a2a1b', dark2:'#05190f',
+    paint:function(g,T){
+      g.fillStyle='#1f5a33'; g.fillRect(0,0,T,T);
+      var tri=[
+        [0,0,  15,0,  7,13, '#4cb072'],
+        [15,0, 32,0,  24,14,'#3b9459'],
+        [0,13, 10,13, 4,27, '#35874f'],
+        [10,13,27,13, 19,29,'#55c07e'],
+        [27,14,32,14, 30,32,'#236841'],
+        [0,27, 18,27, 9,32, '#43a566'],
+        [18,29,32,20, 32,32,'#2f9459']
+      ];
+      for(var i=0;i<tri.length;i++){
+        var t=tri[i];
+        _pxTri(g,t[0],t[1],t[2],t[3],t[4],t[5],t[6]);
+        _pxLine(g,t[0],t[1],t[4],t[5],'rgba(201,247,221,0.55)');
+        _pxLine(g,t[4],t[5],t[2],t[3],'rgba(5,25,15,0.45)');
+      }
+      _pxSpeckle(g,T,{n:20,seed:6.9,t:0.72,hi:'#c9f7dd',lo:'#12402a'});
+      for(var k=0;k<6;k++){ _pxDot(g,Math.floor(_pr(33.1+k*4.7)*T),Math.floor(_pr(37.3+k*2.9)*T),'#eafff2'); } } },
+
+  { id:'obsidian', name:'熔岩黑曜石', light:'#ffb347', light2:'#ff7a1a', mid:'#2e2a30', dark:'#0a090c', dark2:'#050405',
+    paint:function(g,T){
+      g.fillStyle='#1c1a1e'; g.fillRect(0,0,T,T);
+      for(var i=0;i<26;i++){
+        var a=Math.floor(_pr(1.7+i*5.3)*T), b=Math.floor(_pr(3.9+i*7.7)*T);
+        var len=3+Math.floor(_pr(5.1+i*2.3)*8);
+        for(var s=0;s<len;s++){ g.fillStyle='rgba(80,76,90,0.5)'; g.fillRect(a+s,b+s,1,1); }
+      }
+      for(var k=0;k<4;k++){
+        var x=Math.floor(_pr(23.7+k*6.1)*T), y=0;
+        while(y<T){
+          var dx=(_pr(29.3+k*3.7+y*0.7)>0.5)?1:-1;
+          g.fillStyle='rgba(255,90,20,0.85)'; g.fillRect(x,y,1,1);
+          g.fillStyle='rgba(120,30,10,0.75)'; g.fillRect(x+dx,y,1,1);
+          g.fillStyle='#ffb347'; if(y%3===0) g.fillRect(x,y,1,1);
+          x+=dx; y+=1; if(x<0)x=1; if(x>=T)x=T-2;
+        }
+      }
+      _pxSpeckle(g,T,{n:20,seed:8.3,hi:'#4a4654',lo:'#000000'}); } },
+
+  { id:'gold', name:'黄金神殿', light:'#ffeeb0', light2:'#f0d178', mid:'#c9a227', dark:'#6d5310', dark2:'#4a380a',
+    paint:function(g,T){
+      _pxBricks(g,T,{rh:8,bw:16,mortar:'#6d5310',brick:'#c9a227',brickHi:'#e8c85a',brickLo:'#9c7b18',
+        seed:9.1,
+        motif:function(g,bx,by,bw,bh){
+          var cx=bx+Math.floor(bw/2), cy=by+Math.floor(bh/2);
+          _pxDot(g,cx,cy-1,'#ffeeb0'); _pxDot(g,cx-1,cy,'#ffeeb0');
+          _pxDot(g,cx+1,cy,'#ffeeb0'); _pxDot(g,cx,cy+1,'#ffeeb0');
+          _pxDot(g,cx,cy,'#8a6a10');
+        }});
+      for(var y=0;y<T;y+=8){ g.fillStyle='rgba(255,238,176,0.35)'; g.fillRect(0,y,T,1); } } },
+
+  { id:'brass', name:'机械黄铜', light:'#e8c88a', light2:'#bd9a52', mid:'#8a6a3a', dark:'#3f2f16', dark2:'#281d0d',
+    paint:function(g,T){
+      _pxPanels(g,T,{cell:16,base:'#8a6a3a',seam:'#4a3719',hi:'#c8a768',lo:'#63492a'});
+      for(var x=0;x<T;x+=4){
+        g.fillStyle='#a5834b'; g.fillRect(x,0,2,3);
+        g.fillStyle='#e8c88a'; g.fillRect(x,0,2,1);
+      }
+      for(var y=8;y<T;y+=16) for(var x2=8;x2<T;x2+=16){
+        _pxDot(g,x2,y,'#e8c88a'); _pxDot(g,x2+1,y,'#e8c88a');
+        _pxDot(g,x2,y+1,'#63492a'); _pxDot(g,x2+1,y+1,'#63492a');
+      }
+      _pxSpeckle(g,T,{n:18,seed:11.3,hi:'#bd9a52',lo:'#4a3719'}); } },
+
+  { id:'sand', name:'沙漠砂岩', light:'#f4e2ac', light2:'#e0c88a', mid:'#c9a86a', dark:'#7a5f30', dark2:'#584420',
+    paint:function(g,T){
+      _pxBricks(g,T,{rh:8,bw:16,mortar:'#8a6f3a',brick:'#c9a86a',brickHi:'#dcc084',brickLo:'#a8874a',
+        seed:1.7,damage:6,
+        motif:function(g,bx,by,bw,bh){
+          var cx=bx+Math.floor(bw/2);
+          g.fillStyle='#8a6f3a'; g.fillRect(cx,by+2,1,bh-3);
+          g.fillStyle='#7a5f30'; g.fillRect(cx-2,by+2,1,1); g.fillRect(cx+2,by+3,1,1);
+        }});
+      _pxSpeckle(g,T,{n:22,seed:2.4,hi:'#f4e2ac',lo:'#8a6f3a'}); } },
+
+  { id:'mushroom', name:'菌菇林地', light:'#e07a7a', light2:'#b04a52', mid:'#5e4a66', dark:'#241b28', dark2:'#161018',
+    paint:function(g,T){
+      g.fillStyle='#3a2c42'; g.fillRect(0,0,T,T);
+      _pxSpeckle(g,T,{n:28,seed:3.9,hi:'#4e3d58',lo:'#241b28'});
+      function cap(cx,cy,r){
+        for(var yy=-Math.round(r*0.8);yy<=0;yy++){
+          var t=yy/Math.max(1,Math.round(r*0.8));
+          var hw=Math.round(r*Math.sqrt(Math.max(0,1-t*t)));
+          g.fillStyle='#a83440'; g.fillRect(cx-hw,cy+yy,hw*2+1,1);
+          g.fillStyle='#c9505a'; g.fillRect(cx-hw,cy+yy,hw*2+1,1);
+        }
+        g.fillStyle='#ffd8d0';
+        g.fillRect(cx-Math.max(1,Math.round(r*0.5)),cy-Math.round(r*0.42),1,1);
+        g.fillRect(cx+Math.max(1,Math.round(r*0.35)),cy-Math.round(r*0.20),1,1);
+        g.fillRect(cx,cy-Math.round(r*0.62),1,1);
+      }
+      cap(8,22,7); cap(24,14,5); cap(18,30,4);
+      g.fillStyle='#6a5568'; g.fillRect(8,23,1,6); g.fillRect(24,15,1,4); g.fillRect(18,31,1,2);
+    } },
+
+  { id:'bone', name:'白骨墓穴', light:'#f4eeda', light2:'#e2d9bd', mid:'#cfc4a6', dark:'#6b6048', dark2:'#48402f',
+    paint:function(g,T){
+      _pxBricks(g,T,{rh:8,bw:16,mortar:'#7a6f56',brick:'#cfc4a6',brickHi:'#e2d9bd',brickLo:'#a89b7c',
+        seed:4.6,damage:5,
+        motif:function(g,bx,by,bw,bh){
+          var cx=bx+Math.floor(bw/2), cy=by+Math.floor(bh/2);
+          g.fillStyle='#f4eeda'; g.fillRect(cx-1,cy-1,3,2);
+          g.fillStyle='#8a7f66'; g.fillRect(cx-2,cy,1,1); g.fillRect(cx+2,cy,1,1);
+        }});
+      _pxSpeckle(g,T,{n:20,seed:5.2,hi:'#f4eeda',lo:'#8a7f66'}); } },
+
+  { id:'candy', name:'糖果乐园', light:'#fff2f8', light2:'#ffd0e4', mid:'#f2a8c8', dark:'#a04a70', dark2:'#7a3354',
+    paint:function(g,T){
+      for(var y=0;y<T;y++) for(var x=0;x<T;x++){
+        var v=(x+y)%12;
+        g.fillStyle=(v<6)?'#f289b4':((v===6)?'#ffd0e4':'#ffe6f0');
+        g.fillRect(x,y,1,1);
+      }
+      for(var i=0;i<16;i++){
+        var a=Math.floor(_pr(6.1+i*4.3)*T), b=Math.floor(_pr(8.7+i*3.1)*T);
+        g.fillStyle=(i%3===0)?'#ffffff':((i%3===1)?'#ffb0d0':'#8fd8ff');
+        g.fillRect(a,b,1,1);
+      } } },
+
+  { id:'steel', name:'工业钢板', light:'#c0cad6', light2:'#9aa6b4', mid:'#6b7480', dark:'#2c333c', dark2:'#1b2027',
+    paint:function(g,T){
+      _pxPanels(g,T,{cell:16,base:'#6b7480',seam:'#3a424c',hi:'#8792a0',lo:'#4d5560'});
+      for(var y=5;y<T;y+=16) for(var x=5;x<T;x+=16){
+        _pxDot(g,x,y,'#c0cad6'); _pxDot(g,x,y+1,'#3a424c');
+      }
+      for(var yy=T-5;yy<T-1;yy++) for(var xx=0;xx<T;xx++){
+        g.fillStyle=(((xx+yy)%8)<4)?'#e0b022':'#2a2f36';
+        g.fillRect(xx,yy,1,1);
+      } } },
+
+  { id:'bamboo', name:'竹林竹节', light:'#c8e08a', light2:'#a8cc6c', mid:'#7aa845', dark:'#3a5a20', dark2:'#264014',
+    paint:function(g,T){
+      g.fillStyle='#2f4a1c'; g.fillRect(0,0,T,T);
+      for(var c=0;c<3;c++){
+        var x=c*11+1, w=9;
+        g.fillStyle='#5c8433'; g.fillRect(x,0,w,T);
+        g.fillStyle='#7aa845'; g.fillRect(x+1,0,w-2,T);
+        g.fillStyle='#96c25e'; g.fillRect(x+1,0,2,T);
+        g.fillStyle='#3a5a20'; g.fillRect(x+w-1,0,1,T);
+        for(var y=0;y<T;y+=16){
+          g.fillStyle='#3a5a20'; g.fillRect(x,y,w,1);
+          g.fillStyle='#a8cc6c'; g.fillRect(x,y+1,w,1);
+        }
+      }
+      _pxSpeckle(g,T,{n:14,seed:7.7,hi:'#c8e08a',lo:'#2f4a1c'}); } },
+
+  { id:'honey', name:'蜂巢蜜蜡', light:'#ffe08a', light2:'#f0c060', mid:'#d99a2a', dark:'#7a5210', dark2:'#553808',
+    paint:function(g,T){
+      g.fillStyle='#8a5e14'; g.fillRect(0,0,T,T);
+      var R=5, HW=4, dx=HW*2+1, dy=Math.round(R*1.5);
+      for(var row=0;row*dy<T+dy;row++) for(var col=0;col*dx<T+dx;col++){
+        var cx=col*dx+((row%2)?Math.round(dx/2):0), cy=row*dy;
+        for(var yy=-R;yy<=R;yy++){
+          var ay=Math.abs(yy);
+          var hw=(ay<=Math.round(R*0.5))?HW
+                 :Math.max(0,Math.round(HW*(1-(ay-R*0.5)/(R-R*0.5))));
+          if(hw<1) continue;
+          g.fillStyle='#c98a20'; g.fillRect(cx-hw,cy+yy,hw*2+1,1);
+          g.fillStyle='#f0b84a'; g.fillRect(cx-hw+1,cy+yy,hw*2-1,1);
+        }
+      }
+      for(var i=0;i<12;i++)
+        _pxDot(g,Math.floor(_pr(9.1+i*3.7)*T),Math.floor(_pr(11.3+i*5.1)*T),'#ffe08a');
+    } },
+
+  { id:'book', name:'古书典籍', light:'#d8b45a', light2:'#b08a3a', mid:'#7a2a2a', dark:'#3a1010', dark2:'#240808',
+    paint:function(g,T){
+      g.fillStyle='#4a1616'; g.fillRect(0,0,T,T);
+      for(var y=0;y<T;y+=8){
+        g.fillStyle='#8a3030'; g.fillRect(0,y,T,7);
+        g.fillStyle='#9a3a34'; g.fillRect(0,y,T,1);
+        g.fillStyle='#5a1c1c'; g.fillRect(0,y+6,T,1);
+        g.fillStyle='#d8b45a'; g.fillRect(2,y+1,T-4,1);
+        g.fillStyle='#b08a3a'; g.fillRect(2,y+5,T-4,1);
+        g.fillStyle='#d8b45a'; g.fillRect(Math.floor(_pr(12.3+y*0.7)*T),y+2,1,4);
+      } } },
+
+  { id:'coral', name:'珊瑚礁', light:'#ffd0b8', light2:'#f2a890', mid:'#e07a68', dark:'#8a3a32', dark2:'#5f2822',
+    paint:function(g,T){
+      g.fillStyle='#c05a4c'; g.fillRect(0,0,T,T);
+      for(var i=0;i<18;i++){
+        var a=Math.floor(_pr(13.1+i*4.9)*T), b=Math.floor(_pr(17.7+i*3.3)*T);
+        var rr=1+Math.floor(_pr(19.3+i*2.7)*2);
+        _pxDisc(g,a,b,rr,'#7a3228');
+        _pxDisc(g,a,b,Math.max(0,rr-1),'#f2a890');
+      }
+      for(var k=0;k<7;k++){
+        var x=Math.floor(_pr(23.1+k*5.3)*T), y=Math.floor(_pr(29.7+k*3.9)*T);
+        _pxLine(g,x,y,x+1,y-4,'#ffd0b8'); _pxLine(g,x+1,y-4,x+3,y-5,'#ffd0b8');
+      }
+      _pxSpeckle(g,T,{n:16,seed:14.2,hi:'#ffd0b8',lo:'#8a3a32'}); } },
+
+  { id:'checker', name:'幻境棋盘', light:'#ffffff', light2:'#f0ecf8', mid:'#e8e4f0', dark:'#2a2438', dark2:'#181328',
+    paint:function(g,T){
+      for(var y=0;y<T;y+=8) for(var x=0;x<T;x+=8){
+        var dk=(((x/8)+(y/8))%2===0);
+        g.fillStyle=dk?'#241f30':'#e8e4f0'; g.fillRect(x,y,8,8);
+        g.fillStyle=dk?'#3a3450':'#ffffff'; g.fillRect(x,y,8,1); g.fillRect(x,y,1,8);
+      } } }
+];
+var _PLAT_STYLE_BY_ID = {};
+(function(){
+  for(var i=0;i<_PLAT_STYLES.length;i++) _PLAT_STYLE_BY_ID[_PLAT_STYLES[i].id]=_PLAT_STYLES[i];
+})();
+function _platStyleIdOf(el){
+  var s=(el&&el.style)?String(el.style):'';
+  return _PLAT_STYLE_BY_ID[s]?s:'default';
+}
+function _platStyleOf(el){ return _PLAT_STYLE_BY_ID[_platStyleIdOf(el)]; }
+
+/* ── 异贴图接缝：14px「连续混色」渐变（颜色线性插值 + 两端淡出，正中间无硬边） ── */
+var _SEAM_W = 14;
+function _seamRgb(hex){
+  return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)];
+}
+var _seamStopMemo = {};
+function _seamStops(grad,aHex,bHex,peak){
+  /* ★memo★：同一对颜色 + 同一 peak ⇒ 停靠点只算一次（视觉完全不变） */
+  var key=aHex+'|'+bHex+'|'+peak;
+  var list=_seamStopMemo[key];
+  if(!list){
+    var A=_seamRgb(aHex), B=_seamRgb(bHex), N=12;
+    list=[];
+    for(var i=0;i<=N;i++){
+      var t=i/N;
+      var r=Math.round(A[0]+(B[0]-A[0])*t),
+          g2=Math.round(A[1]+(B[1]-A[1])*t),
+          b2=Math.round(A[2]+(B[2]-A[2])*t);
+      var al=(Math.sin(Math.PI*t)*peak).toFixed(3);
+      list.push([t,'rgba('+r+','+g2+','+b2+','+al+')']);
+    }
+    _seamStopMemo[key]=list;
+  }
+  for(var j=0;j<list.length;j++) grad.addColorStop(list[j][0],list[j][1]);
+}
+/* 在接缝处画渐变带；★裁剪到本块矩形内★ ⇒ 两块各画一半、与绘制顺序无关 */
+function _platSeamBand(g,x,y,w,h,seam,aStyle,bStyle,vertical){
+  var half=_SEAM_W/2, grad;
+  if(vertical) grad=g.createLinearGradient(seam-half,0,seam+half,0);
+  else         grad=g.createLinearGradient(0,seam-half,0,seam+half);
+  _seamStops(grad,aStyle.mid,bStyle.mid,0.78);
+  g.save();
+  g.beginPath(); g.rect(x,y,w,h); g.clip();
+  g.fillStyle=grad;
+  if(vertical) g.fillRect(seam-half,y,_SEAM_W,h);
+  else         g.fillRect(x,seam-half,w,_SEAM_W);
+  g.restore();
+}
+function _platSeamPass(g,el,adj,st){
+  if(!adj) return;
+  var me=st.id;
+  /* ★邻块风格解析★：`adj.xxx` 为 true 表示"该侧确有同类型邻块"。
+     此时邻块的 `style` 即使是 undefined，也必须按 `default` 处理
+     —— 否则「有风格块紧挨无风格块」会漏掉接缝（曾经的真 bug）。 */
+  var nL=adj.left ?(_PLAT_STYLE_BY_ID[adj.sL]||_PLAT_STYLE_BY_ID['default']):null;
+  var nR=adj.right?(_PLAT_STYLE_BY_ID[adj.sR]||_PLAT_STYLE_BY_ID['default']):null;
+  var nU=adj.up   ?(_PLAT_STYLE_BY_ID[adj.sU]||_PLAT_STYLE_BY_ID['default']):null;
+  var nD=adj.down ?(_PLAT_STYLE_BY_ID[adj.sD]||_PLAT_STYLE_BY_ID['default']):null;
+  if(nL&&nL.id===me)nL=null;
+  if(nR&&nR.id===me)nR=null;
+  if(nU&&nU.id===me)nU=null;
+  if(nD&&nD.id===me)nD=null;
+  if(!nL&&!nR&&!nU&&!nD) return;
+  var x=Math.round(el.x), y=Math.round(el.y);
+  var w=Math.round(el.w||8), h=Math.round(el.h||8);
+  if(w<1||h<1) return;
+  if(nL) _platSeamBand(g,x,y,w,h,x,    nL,st,true);
+  if(nR) _platSeamBand(g,x,y,w,h,x+w,  st,nR,true);
+  if(nU) _platSeamBand(g,x,y,w,h,y,    nU,st,false);
+  if(nD) _platSeamBand(g,x,y,w,h,y+h,  st,nD,false);
+}
+
+/* ── 平台砖风格材质表：把 20 种风格转成 `drawBlockPixel` 可吃的材质对象 ──
+   ★`default` 直接复用原 `_BLK_MATS.platform`★ ⇒ 老关卡（无 `style` 字段）逐像素零回归。
+   其余风格：id 唯一（`plat_<id>`）⇒ tile 缓存各自独立；`_paint` 由 `_bktTile` 调用。 */
+var _PLAT_STYLE_MATS = {};
+(function(){
+  _PLAT_STYLE_MATS['default'] = _BLK_MATS.platform;
+  for(var i=0;i<_PLAT_STYLES.length;i++){
+    var s=_PLAT_STYLES[i];
+    if(s.id==='default') continue;
+    _PLAT_STYLE_MATS[s.id] = {
+      id:'plat_'+s.id, base:s.mid, sl:s.light, sd:s.dark,
+      light:s.light, light2:s.light2, mid:s.mid, dark:s.dark, dark2:s.dark2,
+      _paint:s.paint
+    };
+  }
+})();
 
 function drawBlockPixel(g, el, adj, mat){
   var x = Math.round(el.x), y = Math.round(el.y);
@@ -5924,7 +6987,11 @@ function drawBlockPixel(g, el, adj, mat){
   }
 }
 function drawPlatformTo(g, el, adj){
-  drawBlockPixel(g, el, adj, _BLK_MATS.platform);
+  /* ★外形贴图分派★：`_platStyleOf(el)` 缺省 = 'default' ⇒ `_PLAT_STYLE_MATS.default`
+     就是原 `_BLK_MATS.platform` ⇒ 无 `style` 的老关卡逐像素零回归。 */
+  var _st = _platStyleOf(el);
+  drawBlockPixel(g, el, adj, _PLAT_STYLE_MATS[_st.id] || _BLK_MATS.platform);
+  _platSeamPass(g, el, adj, _st);
 }
 function drawMovableTo(g, el, adj){
   drawBlockPixel(g, el, adj, _BLK_MATS.movable);
@@ -7068,6 +8135,13 @@ function drawBossTo(g, boss, now, cam, zoom){
      根本看不清自己在摆什么 —— 编辑器要"所见即所得"，与"正式游戏里苏醒前淡"不冲突。 */
   var vis=(cam?(boss._vis!==undefined?boss._vis:1):1);
   if(vis<0.999)g.globalAlpha*=vis;
+  /* ★BOSS 造型分派★：`inferno`（原版恶魔）⇒ 走下面原版代码一字不改，老关卡逐像素零回归；
+     其余造型 ⇒ `_drawBossVariant` 只替换"双手→胸甲→角→头→眼→嘴"这一段，
+     苏醒淡入 / 死亡淡出+碎片 / 沉睡 Z / 编辑器半径圈等公共前后段全部复用。 */
+  var _bvs=_bossStyleOf(boss);
+  if(_bvs!==_BOSS_STYLE_BY_ID['inferno']){
+    _drawBossVariant(g, boss, _bvs, now);
+  } else {
   /* ---- 双手（爪）：先画，压在肩后 ---- */
   for(var side=0;side<2;side++){
     var dir=side?-1:1;
@@ -7188,6 +8262,7 @@ function drawBossTo(g, boss, now, cam, zoom){
     g.beginPath();g.arc(mouthX+mouthW/2,mouthY+openH/2,mouthW*0.45,0,Math.PI*2);g.fill();
     g.restore();
   }
+  }  /* ← ★造型分派结束★ */
   /* 沉睡时头顶飘起的小 Z（滑稽） */
   if(!dead&&!awake){
     for(var zi=0;zi<3;zi++){
@@ -7246,6 +8321,854 @@ function drawBossTo(g, boss, now, cam, zoom){
     /* 半径数值：省得开属性面板去对 */
     g.restore();
   }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ★BOSS「造型」系统（10 种）★
+   ---------------------------------------------------------------------
+   用户原话：「给游戏里的 BOSS 设计 10 种相同设计尺寸身体结构的不同配色不同外形
+   （只是替换外形，功能上应该是完全一样的，替换外形要包含完整的替换后全套动作，
+   包含睡觉、醒来、口吐弹药、死亡），要一眼能看出是不同的 boss」。
+   实现口径：
+     · BOSS 元素带 `style` 字段（id，缺省 = 'inferno' = 原版恶魔）。
+     · **包围盒、身体结构、动作与判定全部不变**：`drawBossTo` 的公共前后段
+       （苏醒淡入 / 死亡淡出+碎片 / 沉睡 Z / 编辑器半径圈）完全复用；
+       只有"双手→胸甲→角→头→眼→嘴"这一段按造型分派。
+     · ★`inferno` 走**原版代码一字不改**★ ⇒ 老关卡逐像素零回归。
+     · 造型钩子签名：horns/eyes/mouth/armor(g,B,G,P,now[,st[,mo]])，head(g,B,G,P)，
+       arms/torso(g,B,P,now)，extras(g,B,G,P,now,st)。 */
+function _bossHeadGeom(B,o){
+  o=o||{};
+  var w=B.w,h=B.h;
+  var headW=o.headW||Math.max(14,Math.round(w*0.46));
+  var headH=o.headH||Math.max(12,Math.round(h*0.36));
+  return {headX:B.x+Math.round((w-headW)/2), headY:B.y+Math.round(h*0.06), headW:headW, headH:headH};
+}
+/* 双臂 + 爪（= 原版 drawBossTo 的手臂段，参数化） */
+function _bossArms(g,B,P,now,o){
+  o=o||{};
+  var x=B.x,y=B.y,w=B.w,h=B.h;
+  var claw=o.claw||P.bone, claws=(o.claws!==undefined?o.claws:3);
+  var armC=o.armC||P.plate, palmC=o.palmC||P.body;
+  for(var side=0;side<2;side++){
+    var dir=side?-1:1;
+    var aw=Math.max(4,Math.round(w*0.13));
+    var pw=Math.max(6,Math.round(w*0.18));
+    var ph=Math.max(5,Math.round(h*0.16));
+    var armH=Math.max(8,Math.round(h*0.32));
+    var ax=dir>0?(x-Math.round(aw*0.55)):(x+w-Math.round(aw*0.45));
+    var ay=y+Math.round(h*0.46)+Math.round(Math.sin(now*1.3+side*1.7)*2);
+    _px(g,ax,ay,aw,armH,armC);
+    _px(g,ax,ay,1,armH,P.dark);
+    _px(g,ax+aw-1,ay,1,armH,P.edge);
+    var px1=dir>0?(ax-pw+Math.round(aw*0.9)):ax;
+    var py1=ay+armH-Math.round(ph*0.5);
+    _px(g,px1,py1,pw,ph,palmC);
+    _px(g,px1,py1,pw,1,P.edge);
+    _px(g,px1,py1+ph-1,pw,1,P.dark);
+    var fl=Math.max(2,Math.round(h*0.10));
+    for(var fi=0;fi<claws;fi++){
+      var fx=px1+Math.round((fi+0.5)*pw/claws);
+      for(var fk=0;fk<fl;fk++){
+        var fw2=Math.max(1,Math.round(2*(1-fk/Math.max(1,fl))+0.6));
+        _px(g,fx-Math.round(fw2/2),py1+ph-1+fk,fw2,1,claw);
+      }
+    }
+  }
+}
+/* 胸甲（桶形 + 中线 + 肩甲） */
+function _bossTorso(g,B,P,now,o){
+  o=o||{};
+  var x=B.x,y=B.y,w=B.w,h=B.h;
+  var torY=y+Math.round(h*0.38);
+  var torH=Math.max(4,h-(torY-y));
+  var torW=w;
+  for(var ty=0;ty<torH;ty++){
+    var tw2=Math.max(4,Math.round(torW*(0.80+0.20*Math.min(1,ty/Math.max(1,torH*0.5)))));
+    _px(g,x+Math.round((torW-tw2)/2),torY+ty,tw2,1,o.plate||P.plate);
+  }
+  _px(g,x+Math.round(w/2)-1,torY+2,2,Math.max(2,torH-4),P.dark);
+  _px(g,x-1,torY,Math.max(3,Math.round(w*0.10)),Math.max(3,Math.round(torH*0.22)),o.edge||P.edge);
+  _px(g,x+w-Math.max(2,Math.round(w*0.10))+1,torY,Math.max(3,Math.round(w*0.10)),Math.max(3,Math.round(torH*0.22)),o.edge||P.edge);
+}
+/* 头（梯形逐行收边） */
+function _bossHeadRows(g,B,G,P,o){
+  o=o||{};
+  for(var ry=0;ry<G.headH;ry++){
+    var rr2=Math.max(2,Math.round(G.headW*(1-Math.abs(ry/G.headH-0.35)*0.28)));
+    _px(g,G.headX+Math.round((G.headW-rr2)/2),G.headY+ry,rr2,1,ry<G.headH*0.20?(o.crown||P.edge):(o.skin||P.body));
+  }
+}
+/* 默认：羊角（4 段向斜上外弯） */
+function _bossDefHorns(g,B,G,P,now){
+  for(var hs=0;hs<2;hs++){
+    var hd=hs?-1:1;
+    var baseX=hd>0?(G.headX+Math.round(G.headW*0.10)):(G.headX+G.headW-Math.round(G.headW*0.10));
+    var baseY=G.headY+Math.round(G.headH*0.18);
+    for(var si=0;si<4;si++){
+      var t=si/3;
+      var segW=Math.max(2,Math.round(G.headW*0.14*(1-t*0.55)));
+      var segH=Math.max(2,Math.round(G.headH*0.26*(1-t*0.30)));
+      var sx=baseX+hd*Math.round(t*G.headW*0.30);
+      var sy=baseY-Math.round((si+1)*G.headH*0.24);
+      _px(g,sx-Math.round(segW/2),sy,segW,segH,si===3?P.bone:P.plate);
+    }
+  }
+}
+/* 默认：双眼（沉睡闭眼 / 死亡熄灭 / 苏醒发光） */
+function _bossDefEyes(g,B,G,P,now,st){
+  var eyeY=G.headY+Math.round(G.headH*0.40);
+  var eyeW=Math.max(2,Math.round(G.headW*0.20));
+  var eyeH=Math.max(2,Math.round(G.headH*0.16));
+  var lx=G.headX+Math.round(G.headW*0.16), rx=G.headX+Math.round(G.headW*0.62);
+  if(st==='dead'){ _px(g,lx,eyeY,eyeW,eyeH,'#2a0f14'); _px(g,rx,eyeY,eyeW,eyeH,'#2a0f14'); return; }
+  if(st==='dormant'){ _px(g,lx,eyeY+Math.round(eyeH/2),eyeW,1,'#1a060a'); _px(g,rx,eyeY+Math.round(eyeH/2),eyeW,1,'#1a060a'); return; }
+  var eg=0.75+0.25*Math.sin(now*4);
+  _px(g,lx,eyeY,eyeW,eyeH,'#2a0a10'); _px(g,rx,eyeY,eyeW,eyeH,'#2a0a10');
+  g.save(); g.globalAlpha=eg;
+  _px(g,lx+1,eyeY+1,Math.max(1,eyeW-2),Math.max(1,eyeH-2),P.eye);
+  _px(g,rx+1,eyeY+1,Math.max(1,eyeW-2),Math.max(1,eyeH-2),P.eye);
+  g.globalAlpha=eg*0.32; g.fillStyle=P.eyeCore||P.glow;
+  g.beginPath(); g.arc(lx+eyeW/2,eyeY+eyeH/2,eyeW*1.5,0,Math.PI*2); g.fill();
+  g.beginPath(); g.arc(rx+eyeW/2,eyeY+eyeH/2,eyeW*1.5,0,Math.PI*2); g.fill();
+  g.restore();
+}
+/* 默认：大嘴（尖牙 + 张口辉光） */
+function _bossDefMouth(g,B,G,P,now,st,mo){
+  var mouthW=Math.max(6,Math.round(G.headW*0.64));
+  var mouthH=Math.max(3,Math.round(G.headH*0.26));
+  var mouthX=G.headX+Math.round((G.headW-mouthW)/2);
+  var mouthY=G.headY+G.headH-Math.round(mouthH*0.90);
+  var openH=Math.max(2,Math.round(mouthH*(0.45+1.15*mo)));
+  _px(g,mouthX,mouthY,mouthW,openH,'#1a0408');
+  var tn=Math.max(3,Math.floor(mouthW/3));
+  for(var ti=0;ti<tn;ti++){
+    var tx=mouthX+Math.round((ti+0.5)*mouthW/tn);
+    if(ti%2===0)_px(g,tx,mouthY,1,Math.max(1,Math.round(openH*0.32)),P.bone);
+    else _px(g,tx,mouthY+openH-Math.max(1,Math.round(openH*0.30)),1,Math.max(1,Math.round(openH*0.30)),P.bone);
+  }
+  if(mo>0.02&&st!=='dead'){
+    g.save(); g.globalAlpha=mo*0.55; g.fillStyle=P.eyeCore||P.glow;
+    g.beginPath(); g.arc(mouthX+mouthW/2,mouthY+openH/2,mouthW*0.45,0,Math.PI*2); g.fill(); g.restore();
+  }
+}
+/* 默认：胸口魔纹 */
+function _bossDefArmor(g,B,G,P,now,st){
+  var x=B.x,y=B.y,w=B.w,h=B.h;
+  var torY=y+Math.round(h*0.38);
+  var torH=Math.max(4,h-(torY-y));
+  var runeY=torY+Math.round(torH*0.30)+Math.round(Math.sin(now*2)*1);
+  var runeGlow=st==='dead'?0.12:(0.45+0.35*(0.5+0.5*Math.sin(now*3.2)));
+  g.save(); g.globalAlpha=runeGlow;
+  _px(g,x+Math.round(w*0.28),runeY,Math.max(2,Math.round(w*0.10)),2,P.rune);
+  _px(g,x+Math.round(w*0.62),runeY,Math.max(2,Math.round(w*0.10)),2,P.rune);
+  _px(g,x+Math.round(w*0.45),runeY+3,Math.max(2,Math.round(w*0.10)),2,P.rune);
+  g.restore();
+}
+/* 手臂样式：claw 爪 / tentacle 触手 / mech 机械爪 / webbed 蹼手 / branch 树枝 / none 无 */
+function _bossArmsStyle(g,B,P,now,o){
+  o=o||{}; var style=o.style||'claw';
+  if(style==='none') return;
+  var x=B.x,y=B.y,w=B.w,h=B.h;
+  for(var side=0;side<2;side++){
+    var dir=side?-1:1;
+    var aw=Math.max(4,Math.round(w*(o.aw||0.13)));
+    var armH=Math.max(8,Math.round(h*(o.armH||0.32)));
+    var ax=dir>0?(x-Math.round(aw*0.55)):(x+w-Math.round(aw*0.45));
+    var ay=y+Math.round(h*(o.ay||0.46))+Math.round(Math.sin(now*1.3+side*1.7)*2);
+    if(style==='tentacle'){
+      var n=Math.round(h*0.40);
+      for(var s=0;s<n;s++){
+        var wob=Math.round(Math.sin(now*2.4+s*0.45+side*1.3)*2);
+        var wdt=Math.max(2,Math.round(aw*0.85*(1-s/n*0.45)));
+        _px(g,ax+(dir>0?0:aw-wdt)+wob,ay+s*1.6,wdt,2,(s%2)?P.plate:P.edge);
+      }
+      continue;
+    }
+    if(style==='branch'){
+      var nb=Math.round(h*0.34);
+      for(var s2=0;s2<nb;s2++) _px(g,ax+((s2%3===0)?1:0),ay+s2*1.5,Math.max(2,Math.round(aw*0.7)),2,P.plate);
+      _px(g,ax-2,ay+Math.round(h*0.28),6,3,P.plate);
+      _px(g,ax-3,ay+Math.round(h*0.32),4,2,P.plate);
+      _px(g,ax+aw-1,ay+Math.round(h*0.24),5,2,P.plate);
+      continue;
+    }
+    _px(g,ax,ay,aw,armH,o.armC||P.plate);
+    _px(g,ax,ay,1,armH,P.dark);
+    _px(g,ax+aw-1,ay,1,armH,P.edge);
+    var pw=Math.max(6,Math.round(w*(o.pw||0.18)));
+    var ph=Math.max(5,Math.round(h*(o.ph||0.16)));
+    var px1=dir>0?(ax-pw+Math.round(aw*0.9)):ax;
+    var py1=ay+armH-Math.round(ph*0.5);
+    _px(g,px1,py1,pw,ph,o.palmC||P.body);
+    _px(g,px1,py1,pw,1,P.edge);
+    _px(g,px1,py1+ph-1,pw,1,P.dark);
+    if(style==='mech'){
+      for(var fi=0;fi<2;fi++){
+        var fx=px1+Math.round((fi+0.5)*pw/2)-1;
+        _px(g,fx,py1+ph,3,Math.max(2,Math.round(h*0.07)),P.bone);
+      }
+      _px(g,px1+Math.round(pw/2)-1,py1+Math.round(ph/2)-1,2,2,P.glow);
+    } else if(style==='webbed'){
+      for(var f2=0;f2<3;f2++){
+        var fx2=px1+Math.round((f2+0.5)*pw/3);
+        _px(g,fx2-1,py1+ph,2,Math.max(2,Math.round(h*0.06)),P.bone);
+      }
+      _px(g,px1+1,py1+ph-1,pw-2,1,P.edge);
+    } else {
+      var fl=Math.max(2,Math.round(h*0.10));
+      for(var fi3=0;fi3<3;fi3++){
+        var fx3=px1+Math.round((fi3+0.5)*pw/3);
+        for(var fk=0;fk<fl;fk++){
+          var fw2=Math.max(1,Math.round(2*(1-fk/Math.max(1,fl))+0.6));
+          _px(g,fx3-Math.round(fw2/2),py1+ph-1+fk,fw2,1,o.claw||P.bone);
+        }
+      }
+    }
+  }
+}
+/* 躯干样式：barrel 桶形 / square 方形 / squat 宽扁 / dome 穹顶 / rock 岩块 */
+function _bossTorsoStyle(g,B,P,now,o){
+  o=o||{}; var style=o.style||'barrel';
+  var x=B.x,y=B.y,w=B.w,h=B.h;
+  var torY=y+Math.round(h*0.38);
+  var torH=Math.max(4,h-(torY-y));
+  var torW=w;
+  if(style==='square'){
+    var sw=Math.round(w*0.86), sx=x+Math.round((w-sw)/2);
+    _px(g,sx,torY,sw,torH,o.plate||P.plate);
+    _px(g,sx,torY,sw,2,o.edge||P.edge);
+    _px(g,sx,torY,2,torH,P.dark);
+    _px(g,sx+sw-2,torY,2,torH,P.dark);
+    for(var yy=torY+5;yy<torY+torH-2;yy+=6) _px(g,sx+3,yy,sw-6,1,P.dark);
+  } else if(style==='squat'){
+    for(var ty=0;ty<torH;ty++){
+      var tw2=Math.max(6,Math.round(torW*(0.98-0.12*Math.min(1,ty/Math.max(1,torH*0.4)))));
+      _px(g,x+Math.round((torW-tw2)/2),torY+ty,tw2,1,o.plate||P.plate);
+    }
+    _px(g,x+Math.round(w/2)-1,torY+2,2,Math.max(2,torH-4),P.dark);
+  } else if(style==='dome'){
+    for(var ty2=0;ty2<torH;ty2++){
+      var t=ty2/torH;
+      var tw3=Math.max(4,Math.round(torW*(0.52+0.48*Math.sqrt(Math.min(1,t*1.7)))));
+      _px(g,x+Math.round((torW-tw3)/2),torY+ty2,tw3,1,o.plate||P.plate);
+    }
+  } else if(style==='rock'){
+    for(var ty3=0;ty3<torH;ty3++){
+      var tw4=Math.max(4,Math.round(torW*(0.82+0.18*Math.min(1,ty3/Math.max(1,torH*0.5)))));
+      _px(g,x+Math.round((torW-tw4)/2),torY+ty3,tw4,1,o.plate||P.plate);
+    }
+    for(var i=0;i<16;i++){
+      var a=x+Math.round(_pr(31.1+i*4.3)*w), b=torY+Math.round(_pr(33.7+i*3.1)*torH);
+      _px(g,a,b,2,2,P.dark); _px(g,a,b,2,1,P.edge);
+    }
+  } else {
+    for(var ty4=0;ty4<torH;ty4++){
+      var tw5=Math.max(4,Math.round(torW*(0.80+0.20*Math.min(1,ty4/Math.max(1,torH*0.5)))));
+      _px(g,x+Math.round((torW-tw5)/2),torY+ty4,tw5,1,o.plate||P.plate);
+    }
+    _px(g,x+Math.round(w/2)-1,torY+2,2,Math.max(2,torH-4),P.dark);
+  }
+  if(style!=='dome'&&style!=='squat'){
+    _px(g,x-1,torY,Math.max(3,Math.round(w*0.10)),Math.max(3,Math.round(torH*0.22)),o.edge||P.edge);
+    _px(g,x+w-Math.max(2,Math.round(w*0.10))+1,torY,Math.max(3,Math.round(w*0.10)),Math.max(3,Math.round(torH*0.22)),o.edge||P.edge);
+  }
+}
+/* 造型的躯干/手臂样式（让整体轮廓也彼此不同，而不是"同一个人换帽子"） */
+function _bossStyleArms(style){ return function(g,B,P,now){ _bossArmsStyle(g,B,P,now,{style:style}); }; }
+function _bossStyleTorso(style){ return function(g,B,P,now){ _bossTorsoStyle(g,B,P,now,{style:style}); }; }
+
+/* ── 10 种造型 ── */
+var _BOSS_STYLES = [
+{ id:'inferno', name:'炽炎魔君', P:{body:'#5a1a26',plate:'#7d2534',dark:'#3a0e18',edge:'#a83a4c',bone:'#e8dcc0',
+    glow:'#ff6a4a',eye:'#ffd24a',eyeCore:'#ff8a2a',rune:'#ff6a4a',frag:['#ff6a4a','#7d2534','#3a0e18']} },
+
+{ id:'abyss', name:'深渊魔眼', P:{body:'#241a3a',plate:'#3a2a5c',dark:'#150e26',edge:'#6a4a9a',bone:'#c8b8e0',
+    glow:'#7affd0',eye:'#7affd0',eyeCore:'#3affb0',rune:'#7affd0',frag:['#7affd0','#3a2a5c','#150e26']},
+  torso:_bossStyleTorso('dome'), arms:_bossStyleArms('tentacle'),
+  horns:function(g,B,G,P,now){
+    for(var i=0;i<4;i++){
+      var t=(i<2)?-1:1, k=(i%2);
+      var bx=G.headX+G.headW*(t<0?0.18:0.82), by=G.headY+G.headH*0.10;
+      for(var s=0;s<9;s++){
+        var wob=Math.round(Math.sin(now*2.2+s*0.6+i)*2);
+        _px(g,bx+t*(s*0.9)+wob,by+s*2.4,2,2,(s%3===0)?P.edge:P.plate);
+      }
+      _pxDot(g,bx+t*8+Math.round(Math.sin(now*2.2+9*0.6+i)*2),by+22,P.glow);
+    }
+  },
+  head:function(g,B,G,P){
+    for(var ry=0;ry<G.headH;ry++){
+      var t=ry/G.headH;
+      var rr=Math.max(2,Math.round(G.headW*Math.sqrt(Math.max(0.05,1-Math.pow((t-0.5)*2,2)))));
+      _px(g,G.headX+Math.round((G.headW-rr)/2),G.headY+ry,rr,1,t<0.18?P.edge:P.body);
+    }
+  },
+  eyes:function(g,B,G,P,now,st){
+    var cx=G.headX+Math.round(G.headW*0.5), cy=G.headY+Math.round(G.headH*0.42);
+    var ew=Math.max(6,Math.round(G.headW*0.42)), eh=Math.max(4,Math.round(G.headH*0.26));
+    if(st==='dormant'){ _px(g,cx-Math.round(ew/2),cy,ew,1,'#0d0718'); return; }
+    var dead=(st==='dead');
+    _pxDisc(g,cx,cy,Math.round(eh/2)+1,dead?'#120a1c':'#0a0612');
+    for(var i=0;i<eh;i++){
+      var t=i/Math.max(1,eh-1), hw=Math.round(ew/2*Math.sqrt(Math.max(0,1-Math.pow((t-0.5)*2,2))));
+      _px(g,cx-hw,cy-Math.round(eh/2)+i,hw*2+1,1,dead?'#1e3a34':P.eye);
+    }
+    if(!dead){
+      _pxDisc(g,cx,cy,Math.max(1,Math.round(eh*0.30)),'#0a1a18');
+      g.save(); g.globalAlpha=0.55+0.35*Math.sin(now*3.1); g.fillStyle=P.eyeCore;
+      g.beginPath(); g.arc(cx,cy,ew*0.55,0,Math.PI*2); g.fill(); g.restore();
+    }
+    for(var k=0;k<3;k++){
+      var ax=cx+(k-1)*Math.round(G.headW*0.30), ay=G.headY+Math.round(G.headH*0.16);
+      _pxDot(g,ax,ay,dead?'#1a3030':P.glow);
+    }
+  },
+  mouth:function(g,B,G,P,now,st,mo){
+    var cx=G.headX+Math.round(G.headW*0.5);
+    var mouthY=G.headY+G.headH-Math.round(G.headH*0.10);
+    var openH=Math.max(2,Math.round(G.headH*(0.16+0.30*mo)));
+    for(var i=0;i<openH;i++){
+      var hw=Math.max(1,Math.round(G.headW*0.16*(1-i/Math.max(1,openH))));
+      _px(g,cx-hw,mouthY+i,hw*2+1,1,'#0a0410');
+    }
+    if(mo>0.02&&st!=='dead'){
+      g.save(); g.globalAlpha=mo*0.5; g.fillStyle=P.eyeCore;
+      g.beginPath(); g.arc(cx,mouthY+openH/2,6,0,Math.PI*2); g.fill(); g.restore();
+    }
+  },
+  armor:function(g,B,G,P,now,st){
+    var x=B.x,y=B.y,w=B.w,h=B.h;
+    var torY=y+Math.round(h*0.38), torH=Math.max(4,h-(torY-y));
+    g.save(); g.globalAlpha=st==='dead'?0.15:(0.40+0.25*Math.sin(now*2.4));
+    for(var i=0;i<5;i++) _pxDot(g,x+Math.round(w*(0.22+i*0.14)),torY+Math.round(torH*0.55)+((i%2)?2:0),P.glow);
+    g.restore();
+  } },
+
+{ id:'thunder', name:'雷霆领主', P:{body:'#2a2a4a',plate:'#46466e',dark:'#141428',edge:'#8a8aff',bone:'#e8f0ff',
+    glow:'#a0f0ff',eye:'#ffffff',eyeCore:'#a0f0ff',rune:'#a0f0ff',frag:['#a0f0ff','#46466e','#141428']},
+  horns:function(g,B,G,P,now){
+    for(var hs=0;hs<2;hs++){
+      var hd=hs?-1:1;
+      var baseX=hd>0?(G.headX+Math.round(G.headW*0.16)):(G.headX+G.headW-Math.round(G.headW*0.16));
+      var baseY=G.headY+Math.round(G.headH*0.20);
+      for(var s=0;s<7;s++){
+        var wdt=Math.max(1,Math.round(3-s*0.30));
+        _px(g,baseX+hd*Math.round(s*1.5)-Math.round(wdt/2),baseY-s*Math.round(G.headH*0.14),wdt,Math.max(1,Math.round(G.headH*0.14)+1),s>4?P.bone:P.plate);
+      }
+      _pxDot(g,baseX+hd*11,baseY-Math.round(G.headH*0.98),P.glow);
+    }
+    g.save(); g.globalAlpha=0.45+0.45*Math.sin(now*7);
+    for(var k=0;k<2;k++){
+      var a=G.headX+Math.round(G.headW*(0.30+k*0.40)), b=G.headY-Math.round(G.headH*0.30);
+      _pxLine(g,a,b,a+2,b-4,P.glow); _pxLine(g,a+2,b-4,a-1,b-8,P.glow); _pxLine(g,a-1,b-8,a+3,b-11,P.glow);
+    }
+    g.restore();
+  },
+  eyes:function(g,B,G,P,now,st){
+    var eyeY=G.headY+Math.round(G.headH*0.40);
+    var eyeW=Math.max(2,Math.round(G.headW*0.22)), eyeH=Math.max(2,Math.round(G.headH*0.13));
+    var lx=G.headX+Math.round(G.headW*0.13), rx=G.headX+Math.round(G.headW*0.63);
+    if(st==='dormant'){ _px(g,lx,eyeY+Math.round(eyeH/2),eyeW,1,'#0c0c20'); _px(g,rx,eyeY+Math.round(eyeH/2),eyeW,1,'#0c0c20'); return; }
+    var dead=(st==='dead');
+    _px(g,lx-1,eyeY-1,eyeW+2,eyeH+2,'#0e0e22'); _px(g,rx-1,eyeY-1,eyeW+2,eyeH+2,'#0e0e22');
+    _px(g,lx,eyeY,eyeW,eyeH,dead?'#3a3a60':P.eye); _px(g,rx,eyeY,eyeW,eyeH,dead?'#3a3a60':P.eye);
+    if(!dead){
+      g.save(); g.globalAlpha=0.35+0.35*Math.sin(now*4);
+      _px(g,lx-2,eyeY-2,eyeW+4,1,P.glow); _px(g,rx-2,eyeY-2,eyeW+4,1,P.glow);
+      g.restore();
+    }
+  },
+  mouth:function(g,B,G,P,now,st,mo){
+    var mouthW=Math.max(6,Math.round(G.headW*0.66));
+    var mouthH=Math.max(3,Math.round(G.headH*0.22));
+    var mouthX=G.headX+Math.round((G.headW-mouthW)/2);
+    var mouthY=G.headY+G.headH-Math.round(mouthH*0.85);
+    var openH=Math.max(2,Math.round(mouthH*(0.4+1.2*mo)));
+    _px(g,mouthX,mouthY,mouthW,openH,'#08081a');
+    for(var ti=0;ti<Math.floor(mouthW/3);ti++){
+      var tx=mouthX+Math.round((ti+0.5)*mouthW/Math.floor(mouthW/3));
+      _px(g,tx,mouthY,1,Math.max(1,Math.round(openH*0.40)),P.bone);
+    }
+    if(mo>0.02&&st!=='dead'){
+      g.save(); g.globalAlpha=mo*0.6; g.fillStyle=P.glow;
+      g.beginPath(); g.arc(mouthX+mouthW/2,mouthY+openH/2,mouthW*0.42,0,Math.PI*2); g.fill(); g.restore();
+    }
+  },
+  armor:function(g,B,G,P,now,st){
+    var x=B.x,y=B.y,w=B.w,h=B.h;
+    var torY=y+Math.round(h*0.38), torH=Math.max(4,h-(torY-y));
+    g.save(); g.globalAlpha=st==='dead'?0.12:(0.35+0.35*Math.abs(Math.sin(now*3)));
+    _px(g,x+Math.round(w*0.30),torY+Math.round(torH*0.32),Math.max(2,Math.round(w*0.14)),1,P.glow);
+    _pxLine(g,x+Math.round(w*0.37),torY+Math.round(torH*0.32),x+Math.round(w*0.55),torY+Math.round(torH*0.70),P.glow);
+    _px(g,x+Math.round(w*0.56),torY+Math.round(torH*0.70),Math.max(2,Math.round(w*0.14)),1,P.glow);
+    g.restore();
+  } },
+
+{ id:'steel', name:'机械暴君', P:{body:'#4a5058',plate:'#6b7480',dark:'#262b31',edge:'#9aa6b4',bone:'#d8dee6',
+    glow:'#40e0d0',eye:'#ff4040',eyeCore:'#ff8080',rune:'#40e0d0',frag:['#40e0d0','#6b7480','#262b31']},
+  torso:_bossStyleTorso('square'), arms:_bossStyleArms('mech'),
+  horns:function(g,B,G,P,now){
+    for(var hs=0;hs<2;hs++){
+      var hd=hs?-1:1;
+      var bx=hd>0?(G.headX+Math.round(G.headW*0.22)):(G.headX+G.headW-Math.round(G.headW*0.22));
+      var by=G.headY;
+      for(var s=0;s<6;s++) _px(g,bx,by-s*3,1,3,P.plate);
+      _px(g,bx-1,by-19,3,2,'#2a2f36');
+      g.save(); g.globalAlpha=0.4+0.5*Math.abs(Math.sin(now*3+hs));
+      _pxDot(g,bx,by-20,hs?P.glow:P.eye); g.restore();
+    }
+  },
+  head:function(g,B,G,P){
+    _px(g,G.headX,G.headY,G.headW,G.headH,P.body);
+    _px(g,G.headX,G.headY,G.headW,Math.max(2,Math.round(G.headH*0.14)),P.edge);
+    _px(g,G.headX,G.headY,2,G.headH,P.plate);
+    _px(g,G.headX+G.headW-2,G.headY,2,G.headH,P.dark);
+    _pxDot(g,G.headX+3,G.headY+G.headH-3,P.bone);
+    _pxDot(g,G.headX+G.headW-4,G.headY+G.headH-3,P.bone);
+    _px(g,G.headX,G.headY,2,2,P.dark); _px(g,G.headX+G.headW-2,G.headY,2,2,P.dark);
+  },
+  eyes:function(g,B,G,P,now,st){
+    var cx=G.headX+Math.round(G.headW*0.5);
+    var eyeY=G.headY+Math.round(G.headH*0.42);
+    var eyeW=Math.round(G.headW*0.72), eyeH=Math.max(3,Math.round(G.headH*0.20));
+    var ex=cx-Math.round(eyeW/2);
+    _px(g,ex-1,eyeY-1,eyeW+2,eyeH+2,'#14181d');
+    if(st==='dormant'){ _px(g,ex,eyeY+Math.round(eyeH/2),eyeW,1,'#2a1010'); return; }
+    var dead=(st==='dead');
+    _px(g,ex,eyeY,eyeW,eyeH,dead?'#3a1818':'#4a0e0e');
+    if(!dead){
+      var sweep=Math.round((0.5+0.5*Math.sin(now*2.2))*(eyeW-4));
+      g.save(); g.globalAlpha=0.9;
+      _px(g,ex+2+sweep,eyeY+1,3,Math.max(1,eyeH-2),P.eye);
+      g.globalAlpha=0.35; g.fillStyle=P.eye;
+      g.fillRect(ex,eyeY+Math.round(eyeH/2),eyeW,1);
+      g.restore();
+    }
+  },
+  mouth:function(g,B,G,P,now,st,mo){
+    var mouthW=Math.max(6,Math.round(G.headW*0.62));
+    var mouthH=Math.max(3,Math.round(G.headH*0.20));
+    var mouthX=G.headX+Math.round((G.headW-mouthW)/2);
+    var mouthY=G.headY+G.headH-Math.round(mouthH*0.90);
+    var openH=Math.max(2,Math.round(mouthH*(0.5+0.9*mo)));
+    _px(g,mouthX,mouthY,mouthW,openH,'#0c1014');
+    for(var x=mouthX+2;x<mouthX+mouthW-1;x+=3) _px(g,x,mouthY+1,1,Math.max(1,openH-2),P.plate);
+    if(mo>0.02&&st!=='dead'){
+      g.save(); g.globalAlpha=mo*0.5; g.fillStyle=P.glow;
+      g.fillRect(mouthX,mouthY+Math.round(openH/2)-1,mouthW,2); g.restore();
+    }
+  },
+  armor:function(g,B,G,P,now,st){
+    var x=B.x,y=B.y,w=B.w,h=B.h;
+    var torY=y+Math.round(h*0.38), torH=Math.max(4,h-(torY-y));
+    var cx=x+Math.round(w*0.5), cy=torY+Math.round(torH*0.42);
+    _pxDisc(g,cx,cy,Math.max(3,Math.round(w*0.075)),P.dark);
+    g.save(); g.globalAlpha=st==='dead'?0.15:(0.55+0.40*Math.sin(now*3.4));
+    _pxDisc(g,cx,cy,Math.max(2,Math.round(w*0.050)),P.glow); g.restore();
+    for(var i=0;i<4;i++){ _pxDot(g,x+Math.round(w*(0.20+i*0.20)),torY+3,P.bone); }
+  } },
+
+{ id:'venom', name:'剧毒蟾王', P:{body:'#4a6a20',plate:'#6a8f2e',dark:'#2a3d10',edge:'#9ac040',bone:'#e8f0c0',
+    glow:'#d0ff40',eye:'#ffd24a',eyeCore:'#d0ff40',rune:'#d0ff40',frag:['#d0ff40','#6a8f2e','#2a3d10']},
+  torso:_bossStyleTorso('squat'), arms:_bossStyleArms('webbed'),
+  horns:function(g,B,G,P,now){
+    for(var hs=0;hs<2;hs++){
+      var hd=hs?-1:1;
+      var bx=G.headX+Math.round(G.headW*(hd>0?0.24:0.76));
+      var by=G.headY-Math.round(G.headH*0.06);
+      _pxDisc(g,bx,by,Math.max(4,Math.round(G.headW*0.16)),P.plate);
+      _pxDisc(g,bx,by-1,Math.max(3,Math.round(G.headW*0.13)),P.body);
+    }
+  },
+  head:function(g,B,G,P,o){
+    for(var ry=0;ry<G.headH;ry++){
+      var t=ry/G.headH;
+      var rr=Math.max(4,Math.round(G.headW*(0.72+0.28*Math.min(1,t*2.4))));
+      _px(g,G.headX+Math.round((G.headW-rr)/2),G.headY+ry,rr,1,ry<G.headH*0.16?P.edge:P.body);
+    }
+    for(var i=0;i<9;i++){
+      var a=G.headX+Math.round(_pr(3.3+i*4.7)*G.headW), b=G.headY+Math.round(_pr(5.1+i*3.1)*G.headH);
+      _pxDot(g,a,b,P.dark); _pxDot(g,a,b-1,P.edge);
+    }
+  },
+  eyes:function(g,B,G,P,now,st){
+    var cy=G.headY-Math.round(G.headH*0.06);
+    var ew=Math.max(5,Math.round(G.headW*0.26)), eh=Math.max(4,Math.round(G.headH*0.24));
+    for(var hs=0;hs<2;hs++){
+      var hd=hs?-1:1;
+      var cx=G.headX+Math.round(G.headW*(hd>0?0.24:0.76));
+      if(st==='dormant'){ _px(g,cx-Math.round(ew/2),cy,ew,1,'#16240a'); continue; }
+      var dead=(st==='dead');
+      _px(g,cx-Math.round(ew/2),cy-Math.round(eh/2),ew,eh,dead?'#2a3418':'#0d1606');
+      _px(g,cx-Math.round(ew/2)+1,cy-Math.round(eh/2)+1,Math.max(1,ew-2),Math.max(1,eh-2),dead?'#4a5a2a':P.eye);
+      if(!dead) _px(g,cx-1,cy,2,Math.max(2,Math.round(eh*0.6)),'#1a1206');
+    }
+  },
+  mouth:function(g,B,G,P,now,st,mo){
+    var mouthW=Math.max(8,Math.round(G.headW*0.94));
+    var mouthH=Math.max(3,Math.round(G.headH*0.20));
+    var mouthX=G.headX+Math.round((G.headW-mouthW)/2);
+    var mouthY=G.headY+G.headH-Math.round(mouthH*0.80);
+    var openH=Math.max(2,Math.round(mouthH*(0.45+1.1*mo)));
+    _px(g,mouthX,mouthY,mouthW,openH,'#101a04');
+    var tn=Math.max(4,Math.floor(mouthW/4));
+    for(var ti=0;ti<tn;ti++){
+      var tx=mouthX+Math.round((ti+0.5)*mouthW/tn);
+      if(ti%2===0)_px(g,tx,mouthY,1,Math.max(1,Math.round(openH*0.30)),P.bone);
+      else _px(g,tx,mouthY+openH-Math.max(1,Math.round(openH*0.28)),1,Math.max(1,Math.round(openH*0.28)),P.bone);
+    }
+    if(mo>0.02&&st!=='dead'){
+      g.save(); g.globalAlpha=mo*0.5; g.fillStyle=P.eyeCore;
+      g.beginPath(); g.arc(mouthX+mouthW/2,mouthY+openH/2,mouthW*0.4,0,Math.PI*2); g.fill(); g.restore();
+    }
+  },
+  armor:function(g,B,G,P,now,st){
+    var x=B.x,y=B.y,w=B.w,h=B.h;
+    var torY=y+Math.round(h*0.38), torH=Math.max(4,h-(torY-y));
+    for(var i=0;i<10;i++){
+      var a=x+Math.round(_pr(9.1+i*3.7)*w), b=torY+Math.round(_pr(11.3+i*5.3)*torH);
+      _pxDot(g,a,b,P.dark); _pxDot(g,a,b-1,P.edge);
+    }
+  } },
+
+{ id:'pharaoh', name:'骷髅法老', P:{body:'#cfc4a6',plate:'#e2d9bd',dark:'#6b6048',edge:'#c9a227',bone:'#f4eeda',
+    glow:'#40c0e0',eye:'#40c0e0',eyeCore:'#a0f0ff',rune:'#c9a227',frag:['#40c0e0','#e2d9bd','#6b6048']},
+  horns:function(g,B,G,P,now){
+    for(var hs=0;hs<2;hs++){
+      var hd=hs?-1:1;
+      var bx=hd>0?(G.headX-Math.round(G.headW*0.10)):(G.headX+G.headW-Math.round(G.headW*0.02));
+      var bw=Math.max(4,Math.round(G.headW*0.14));
+      for(var y=0;y<Math.round(G.headH*1.35);y++){
+        var x0=bx+hd*Math.round(y*0.10);
+        _px(g,x0,y+G.headY-Math.round(G.headH*0.12),bw,1,(Math.floor(y/3)%2)?'#1a3a7a':'#c9a227');
+      }
+    }
+    _px(g,G.headX-Math.round(G.headW*0.10),G.headY-Math.round(G.headH*0.16),Math.round(G.headW*1.20),3,'#c9a227');
+  },
+  head:function(g,B,G,P){
+    for(var ry=0;ry<G.headH;ry++){
+      var t=ry/G.headH;
+      var rr=Math.max(4,Math.round(G.headW*(0.66+0.24*Math.min(1,t*2))));
+      _px(g,G.headX+Math.round((G.headW-rr)/2),G.headY+ry,rr,1,ry<G.headH*0.14?P.bone:P.plate);
+    }
+    _px(g,G.headX+Math.round(G.headW*0.10),G.headY+Math.round(G.headH*0.70),Math.round(G.headW*0.18),2,P.dark);
+    _px(g,G.headX+Math.round(G.headW*0.72),G.headY+Math.round(G.headH*0.70),Math.round(G.headW*0.18),2,P.dark);
+  },
+  eyes:function(g,B,G,P,now,st){
+    var eyeY=G.headY+Math.round(G.headH*0.32);
+    var ew=Math.max(3,Math.round(G.headW*0.24)), eh=Math.max(3,Math.round(G.headH*0.24));
+    var lx=G.headX+Math.round(G.headW*0.14), rx=G.headX+Math.round(G.headW*0.62);
+    var dead=(st==='dead');
+    _px(g,lx,eyeY,ew,eh,'#1a1610'); _px(g,rx,eyeY,ew,eh,'#1a1610');
+    if(st==='dormant') return;
+    g.save(); g.globalAlpha=dead?0.25:(0.7+0.3*Math.sin(now*3.6));
+    _px(g,lx+1,eyeY+1,Math.max(1,ew-2),Math.max(1,eh-2),P.eye);
+    _px(g,rx+1,eyeY+1,Math.max(1,ew-2),Math.max(1,eh-2),P.eye);
+    g.globalAlpha=dead?0.1:0.28; g.fillStyle=P.eyeCore;
+    g.beginPath(); g.arc(lx+ew/2,eyeY+eh/2,ew*1.1,0,Math.PI*2); g.fill();
+    g.beginPath(); g.arc(rx+ew/2,eyeY+eh/2,ew*1.1,0,Math.PI*2); g.fill();
+    g.restore();
+    _px(g,G.headX+Math.round(G.headW*0.44),G.headY+Math.round(G.headH*0.56),Math.max(2,Math.round(G.headW*0.12)),Math.max(2,Math.round(G.headH*0.16)),'#1a1610');
+  },
+  mouth:function(g,B,G,P,now,st,mo){
+    var mouthW=Math.max(6,Math.round(G.headW*0.78));
+    var mouthX=G.headX+Math.round((G.headW-mouthW)/2);
+    var mouthY=G.headY+G.headH-Math.round(G.headH*0.24);
+    var openH=Math.max(3,Math.round(G.headH*(0.10+0.16*mo)));
+    _px(g,mouthX,mouthY,mouthW,openH,'#1a1610');
+    for(var x=mouthX+1;x<mouthX+mouthW-1;x+=2) _px(g,x,mouthY,1,openH,P.bone);
+  },
+  armor:function(g,B,G,P,now,st){
+    var x=B.x,y=B.y,w=B.w,h=B.h;
+    var torY=y+Math.round(h*0.38), torH=Math.max(4,h-(torY-y));
+    _px(g,x+Math.round(w*0.16),torY+2,Math.round(w*0.68),2,'#c9a227');
+    _px(g,x+Math.round(w*0.16),torY+Math.round(torH*0.62),Math.round(w*0.68),2,'#c9a227');
+    var cx=x+Math.round(w*0.5), cy=torY+Math.round(torH*0.40);
+    g.save(); g.globalAlpha=st==='dead'?0.2:(0.6+0.35*Math.sin(now*2.6));
+    _pxDisc(g,cx,cy,Math.max(2,Math.round(w*0.055)),P.eye); g.restore();
+  } },
+
+{ id:'magma', name:'熔岩巨兽', P:{body:'#241a18',plate:'#3a2a26',dark:'#120c0a',edge:'#ff7a1a',bone:'#ffe0b0',
+    glow:'#ffb347',eye:'#ffdd66',eyeCore:'#ff7a1a',rune:'#ff7a1a',frag:['#ffb347','#3a2a26','#120c0a']},
+  torso:_bossStyleTorso('rock'),
+  horns:function(g,B,G,P,now){
+    for(var hs=0;hs<2;hs++){
+      var hd=hs?-1:1;
+      var bx=hd>0?(G.headX+Math.round(G.headW*0.14)):(G.headX+G.headW-Math.round(G.headW*0.14));
+      var by=G.headY+Math.round(G.headH*0.16);
+      for(var s=0;s<5;s++){
+        var wdt=Math.max(2,Math.round(G.headW*0.16*(1-s*0.13)));
+        var sx=bx+hd*Math.round(s*G.headW*0.05), sy=by-Math.round((s+1)*G.headH*0.19);
+        _px(g,sx-Math.round(wdt/2),sy,wdt,Math.max(2,Math.round(G.headH*0.20)),P.plate);
+        if(s%2===0){ g.save(); g.globalAlpha=0.6+0.4*Math.sin(now*3+s); _px(g,sx-1,sy+1,2,2,P.glow); g.restore(); }
+      }
+    }
+  },
+  eyes:function(g,B,G,P,now,st){
+    var eyeY=G.headY+Math.round(G.headH*0.40);
+    var ew=Math.max(3,Math.round(G.headW*0.22)), eh=Math.max(3,Math.round(G.headH*0.18));
+    var lx=G.headX+Math.round(G.headW*0.15), rx=G.headX+Math.round(G.headW*0.61);
+    if(st==='dormant'){ _px(g,lx,eyeY+Math.round(eh/2),ew,1,'#2a1408'); _px(g,rx,eyeY+Math.round(eh/2),ew,1,'#2a1408'); return; }
+    var dead=(st==='dead');
+    _px(g,lx-1,eyeY-1,ew+2,eh+2,'#0a0605'); _px(g,rx-1,eyeY-1,ew+2,eh+2,'#0a0605');
+    _px(g,lx,eyeY,ew,eh,dead?'#5a3a1a':P.eye); _px(g,rx,eyeY,ew,eh,dead?'#5a3a1a':P.eye);
+    if(!dead){
+      g.save(); g.globalAlpha=0.35+0.3*Math.sin(now*4.2); g.fillStyle=P.eyeCore;
+      g.beginPath(); g.arc(lx+ew/2,eyeY+eh/2,ew*1.2,0,Math.PI*2); g.fill();
+      g.beginPath(); g.arc(rx+ew/2,eyeY+eh/2,ew*1.2,0,Math.PI*2); g.fill(); g.restore();
+    }
+  },
+  mouth:function(g,B,G,P,now,st,mo){
+    var mouthW=Math.max(6,Math.round(G.headW*0.70));
+    var mouthH=Math.max(3,Math.round(G.headH*0.28));
+    var mouthX=G.headX+Math.round((G.headW-mouthW)/2);
+    var mouthY=G.headY+G.headH-Math.round(mouthH*0.90);
+    var openH=Math.max(2,Math.round(mouthH*(0.45+1.1*mo)));
+    _px(g,mouthX,mouthY,mouthW,openH,'#180604');
+    var tn=Math.max(3,Math.floor(mouthW/4));
+    for(var ti=0;ti<tn;ti++){
+      var tx=mouthX+Math.round((ti+0.5)*mouthW/tn);
+      if(ti%2===0)_px(g,tx,mouthY,2,Math.max(2,Math.round(openH*0.45)),P.bone);
+      else _px(g,tx,mouthY+openH-Math.max(2,Math.round(openH*0.40)),2,Math.max(2,Math.round(openH*0.40)),P.bone);
+    }
+    if(st!=='dead'){
+      g.save(); g.globalAlpha=0.30+0.25*mo; g.fillStyle=P.eyeCore;
+      g.beginPath(); g.arc(mouthX+mouthW/2,mouthY+openH/2,mouthW*0.42,0,Math.PI*2); g.fill(); g.restore();
+    }
+  },
+  armor:function(g,B,G,P,now,st){
+    var x=B.x,y=B.y,w=B.w,h=B.h;
+    var torY=y+Math.round(h*0.38), torH=Math.max(4,h-(torY-y));
+    g.save(); g.globalAlpha=st==='dead'?0.20:(0.55+0.35*Math.sin(now*2.8));
+    for(var k=0;k<4;k++){
+      var sx=x+Math.round(w*(0.22+k*0.19)), sy=torY+2;
+      for(var s=0;s<Math.round(torH*0.8);s++) _pxDot(g,sx+((s%2)?1:0),sy+s,P.glow);
+    }
+    g.restore();
+  } },
+
+{ id:'dream', name:'幻梦水母', P:{body:'#7a4a9a',plate:'#a06ac0',dark:'#3a2050',edge:'#ff9ae0',bone:'#ffe0f8',
+    glow:'#ffe0f8',eye:'#ffffff',eyeCore:'#ff9ae0',rune:'#ff9ae0',frag:['#ff9ae0','#a06ac0','#3a2050']},
+  torso:_bossStyleTorso('dome'), arms:_bossStyleArms('none'),
+  horns:function(g,B,G,P,now){
+    for(var i=0;i<3;i++){
+      var bx=G.headX+Math.round(G.headW*(0.28+i*0.22));
+      for(var s=0;s<5;s++){
+        var wob=Math.round(Math.sin(now*2.6+s*0.7+i)*1.6);
+        _pxDot(g,bx+wob,G.headY-s*2-2,P.edge);
+      }
+    }
+  },
+  head:function(g,B,G,P){
+    for(var ry=0;ry<G.headH;ry++){
+      var t=ry/G.headH;
+      var rr=Math.max(3,Math.round(G.headW*Math.sqrt(Math.max(0.04,1-Math.pow(t,1.7)))));
+      _px(g,G.headX+Math.round((G.headW-rr)/2),G.headY+ry,rr,1,ry<G.headH*0.16?P.edge:P.plate);
+    }
+    g.save(); g.globalAlpha=0.35;
+    for(var k=0;k<2;k++){
+      var hx=G.headX+Math.round(G.headW*(0.22+k*0.30));
+      _px(g,hx,G.headY+Math.round(G.headH*0.30),2,Math.round(G.headH*0.34),'#ffffff');
+    }
+    g.restore();
+  },
+  eyes:function(g,B,G,P,now,st){
+    var eyeY=G.headY+Math.round(G.headH*0.52);
+    var ew=Math.max(3,Math.round(G.headW*0.16));
+    var lx=G.headX+Math.round(G.headW*0.24), rx=G.headX+Math.round(G.headW*0.60);
+    if(st==='dormant'){ _px(g,lx,eyeY,ew,1,'#2a1640'); _px(g,rx,eyeY,ew,1,'#2a1640'); return; }
+    var dead=(st==='dead');
+    var c=dead?'#6a5a80':'#ffffff';
+    _px(g,lx,eyeY+2,ew,1,c); _px(g,lx+1,eyeY+1,ew-2,1,c);
+    _px(g,rx,eyeY+2,ew,1,c); _px(g,rx+1,eyeY+1,ew-2,1,c);
+    if(!dead){
+      g.save(); g.globalAlpha=0.30+0.25*Math.sin(now*3);
+      _px(g,lx,eyeY+3,ew,1,P.eyeCore); _px(g,rx,eyeY+3,ew,1,P.eyeCore); g.restore();
+    }
+  },
+  mouth:function(g,B,G,P,now,st,mo){
+    var cx=G.headX+Math.round(G.headW*0.5);
+    var mouthY=G.headY+Math.round(G.headH*0.80);
+    var r=Math.max(2,Math.round(G.headW*(0.07+0.05*mo)));
+    _pxDisc(g,cx,mouthY,r,'#2a1240');
+    if(st!=='dead'&&mo>0.02){
+      g.save(); g.globalAlpha=mo*0.55; _pxDisc(g,cx,mouthY,Math.max(1,r-1),P.eyeCore); g.restore();
+    }
+  },
+  armor:function(g,B,G,P,now,st){
+    var x=B.x,y=B.y,w=B.w,h=B.h;
+    g.save(); g.globalAlpha=st==='dead'?0.25:0.85;
+    for(var i=0;i<5;i++){
+      var bx=x+Math.round(w*(0.20+i*0.15));
+      for(var s=0;s<Math.round(h*0.22);s++){
+        var wob=Math.round(Math.sin(now*2.2+s*0.5+i*1.1)*2);
+        _pxDot(g,bx+wob,y+h+s,P.edge);
+        if(s%2===0) _pxDot(g,bx+wob,y+h+s+1,P.plate);
+      }
+    }
+    g.restore();
+  } },
+
+{ id:'thorn', name:'荆棘树妖', P:{body:'#5a4020',plate:'#7a5a30',dark:'#2e2010',edge:'#a08050',bone:'#d8c090',
+    glow:'#8fd040',eye:'#d0ff60',eyeCore:'#8fd040',rune:'#8fd040',frag:['#8fd040','#7a5a30','#2e2010']},
+  torso:_bossStyleTorso('rock'), arms:_bossStyleArms('branch'),
+  horns:function(g,B,G,P,now){
+    for(var hs=0;hs<2;hs++){
+      var hd=hs?-1:1;
+      var bx=hd>0?(G.headX+Math.round(G.headW*0.16)):(G.headX+G.headW-Math.round(G.headW*0.16));
+      var by=G.headY+Math.round(G.headH*0.18);
+      for(var s=0;s<4;s++) _px(g,bx+hd*Math.round(s*1.6)-1,by-s*Math.round(G.headH*0.20),3,Math.round(G.headH*0.20)+1,P.plate);
+      _px(g,bx+hd*4-1,by-Math.round(G.headH*0.56),2,Math.round(G.headH*0.24),P.plate);
+      _px(g,bx+hd*10-1,by-Math.round(G.headH*0.70),2,Math.round(G.headH*0.22),P.plate);
+      g.save(); g.globalAlpha=0.9;
+      _pxDot(g,bx+hd*4-2,by-Math.round(G.headH*0.60),P.glow);
+      _pxDot(g,bx+hd*4,by-Math.round(G.headH*0.62),P.glow);
+      _pxDot(g,bx+hd*10-2,by-Math.round(G.headH*0.74),P.glow);
+      g.restore();
+    }
+  },
+  head:function(g,B,G,P){
+    for(var ry=0;ry<G.headH;ry++){
+      var rr=Math.max(4,Math.round(G.headW*(1-Math.abs(ry/G.headH-0.35)*0.22)));
+      _px(g,G.headX+Math.round((G.headW-rr)/2),G.headY+ry,rr,1,ry<G.headH*0.16?P.edge:P.body);
+    }
+    for(var k=0;k<4;k++) _px(g,G.headX+Math.round(G.headW*(0.24+k*0.18)),G.headY+Math.round(G.headH*0.20),1,Math.round(G.headH*0.42),P.dark);
+  },
+  eyes:function(g,B,G,P,now,st){
+    var eyeY=G.headY+Math.round(G.headH*0.38);
+    var ew=Math.max(3,Math.round(G.headW*0.20)), eh=Math.max(3,Math.round(G.headH*0.20));
+    var lx=G.headX+Math.round(G.headW*0.16), rx=G.headX+Math.round(G.headW*0.62);
+    _px(g,lx-1,eyeY-1,ew+2,eh+2,P.dark); _px(g,rx-1,eyeY-1,ew+2,eh+2,P.dark);
+    if(st==='dormant') return;
+    var dead=(st==='dead');
+    g.save(); g.globalAlpha=dead?0.25:(0.7+0.3*Math.sin(now*3.2));
+    _px(g,lx,eyeY,ew,eh,P.eye); _px(g,rx,eyeY,ew,eh,P.eye);
+    g.restore();
+  },
+  mouth:function(g,B,G,P,now,st,mo){
+    var mouthW=Math.max(5,Math.round(G.headW*0.52));
+    var mouthX=G.headX+Math.round((G.headW-mouthW)/2);
+    var mouthY=G.headY+G.headH-Math.round(G.headH*0.22);
+    var openH=Math.max(2,Math.round(G.headH*(0.08+0.16*mo)));
+    _px(g,mouthX,mouthY,mouthW,openH,P.dark);
+    if(mo>0.02&&st!=='dead'){
+      g.save(); g.globalAlpha=mo*0.5; _px(g,mouthX+1,mouthY+1,mouthW-2,Math.max(1,openH-2),P.eyeCore); g.restore();
+    }
+  },
+  armor:function(g,B,G,P,now,st){
+    var x=B.x,y=B.y,w=B.w,h=B.h;
+    var torY=y+Math.round(h*0.38), torH=Math.max(4,h-(torY-y));
+    var cx=x+Math.round(w*0.5), cy=torY+Math.round(torH*0.45);
+    for(var r=Math.round(w*0.16);r>2;r-=3){
+      g.save(); g.globalAlpha=0.55; _pxDisc(g,cx,cy,r,P.dark);
+      _pxDisc(g,cx,cy,Math.max(1,r-1),P.plate); g.restore();
+    }
+    for(var i=0;i<8;i++){
+      var a=x+Math.round(_pr(21.1+i*3.3)*w), b=torY+Math.round(_pr(23.7+i*4.1)*torH);
+      _pxDot(g,a,b,P.glow);
+    }
+  } },
+
+{ id:'void', name:'虚空之主', P:{body:'#1a0e2a',plate:'#2e1a48',dark:'#0a0514',edge:'#c030a0',bone:'#e0a0e8',
+    glow:'#ff40c0',eye:'#ff40c0',eyeCore:'#ff80e0',rune:'#ff40c0',frag:['#ff40c0','#2e1a48','#0a0514']},
+  arms:_bossStyleArms('tentacle'),
+  horns:function(g,B,G,P,now){
+    var n=7;
+    for(var i=0;i<n;i++){
+      var t=i/(n-1);
+      var bx=G.headX+Math.round(G.headW*t);
+      var hgt=Math.round(G.headH*(0.20+0.26*Math.sin(Math.PI*t)));
+      for(var s=0;s<hgt;s++){
+        var wdt=Math.max(1,Math.round((1-s/Math.max(1,hgt))*3));
+        _px(g,bx-Math.round(wdt/2),G.headY-s-1,wdt,1,s>hgt*0.6?P.glow:P.edge);
+      }
+    }
+  },
+  head:function(g,B,G,P){
+    for(var ry=0;ry<G.headH;ry++){
+      var t=ry/G.headH;
+      var rr=Math.max(2,Math.round(G.headW*(0.42+0.58*Math.min(1,t*1.7))));
+      _px(g,G.headX+Math.round((G.headW-rr)/2),G.headY+ry,rr,1,ry<G.headH*0.12?P.edge:P.body);
+    }
+  },
+  eyes:function(g,B,G,P,now,st){
+    var ey=G.headY+Math.round(G.headH*0.40);
+    var r=Math.max(2,Math.round(G.headW*0.075));
+    var pts=[[G.headX+Math.round(G.headW*0.28),ey],
+             [G.headX+Math.round(G.headW*0.72),ey],
+             [G.headX+Math.round(G.headW*0.50),ey-Math.round(G.headH*0.20)]];
+    if(st==='dormant'){ for(var i=0;i<3;i++) _px(g,pts[i][0]-r,pts[i][1],r*2+1,1,'#2a0a22'); return; }
+    var dead=(st==='dead');
+    for(var k=0;k<3;k++){
+      _pxDisc(g,pts[k][0],pts[k][1],r+1,'#0d0416');
+      _pxDisc(g,pts[k][0],pts[k][1],r,dead?'#5a2048':P.eye);
+    }
+    if(!dead){
+      g.save(); g.globalAlpha=0.30+0.25*Math.sin(now*3.8); g.fillStyle=P.eyeCore;
+      for(var m=0;m<3;m++){ g.beginPath(); g.arc(pts[m][0],pts[m][1],r*1.9,0,Math.PI*2); g.fill(); }
+      g.restore();
+    }
+  },
+  mouth:function(g,B,G,P,now,st,mo){
+    var mouthW=Math.max(6,Math.round(G.headW*0.60));
+    var mouthH=Math.max(3,Math.round(G.headH*0.20));
+    var mouthX=G.headX+Math.round((G.headW-mouthW)/2);
+    var mouthY=G.headY+G.headH-Math.round(mouthH*0.85);
+    var openH=Math.max(2,Math.round(mouthH*(0.5+1.0*mo)));
+    _px(g,mouthX,mouthY,mouthW,openH,'#05020a');
+    _px(g,mouthX,mouthY,mouthW,1,P.edge);
+    _px(g,mouthX,mouthY+openH-1,mouthW,1,P.edge);
+    if(mo>0.02&&st!=='dead'){
+      g.save(); g.globalAlpha=mo*0.6; _px(g,mouthX+2,mouthY+1,mouthW-4,Math.max(1,openH-2),P.glow); g.restore();
+    }
+  },
+  armor:function(g,B,G,P,now,st){
+    var x=B.x,y=B.y,w=B.w,h=B.h;
+    var torY=y+Math.round(h*0.38), torH=Math.max(4,h-(torY-y));
+    var cx=x+Math.round(w*0.5), cy=torY+Math.round(torH*0.45);
+    g.save(); g.globalAlpha=st==='dead'?0.15:(0.5+0.35*Math.sin(now*2.2));
+    _pxLine(g,cx-10,cy,cx,cy-9,P.glow); _pxLine(g,cx,cy-9,cx+10,cy,P.glow);
+    _pxLine(g,cx+10,cy,cx,cy+9,P.glow); _pxLine(g,cx,cy+9,cx-10,cy,P.glow);
+    _pxDisc(g,cx,cy,2,P.eyeCore);
+    g.restore();
+  } }
+];
+var _BOSS_STYLE_BY_ID = {};
+(function(){
+  for(var i=0;i<_BOSS_STYLES.length;i++) _BOSS_STYLE_BY_ID[_BOSS_STYLES[i].id]=_BOSS_STYLES[i];
+})();
+function _bossStyleOf(boss){
+  var id=(boss&&boss.style)?String(boss.style):'';
+  return _BOSS_STYLE_BY_ID[id]||_BOSS_STYLE_BY_ID['inferno'];
+}
+/* 变体绘制（公共前后段由 drawBossTo 负责：苏醒淡入 / 死亡淡出 / 碎片 / 沉睡 Z / 编辑器半径圈） */
+function _drawBossVariant(g, boss, V, now){
+  var x=Math.round(boss.x), y=Math.round(boss.y);
+  var w=Math.round(boss.w), h=Math.round(boss.h);
+  var P=V.P;
+  var hurt=boss._hurtFlash||0;
+  if(hurt>0){
+    var kk=Math.min(1,hurt/0.25)*0.72;
+    P={ body:_mixHex(P.body,'#ffffff',kk), plate:_mixHex(P.plate,'#ffffff',kk),
+        dark:_mixHex(P.dark,'#ffffff',kk*0.6), edge:_mixHex(P.edge,'#ffffff',kk),
+        bone:P.bone, glow:P.glow, eye:P.eye, eyeCore:P.eyeCore, rune:P.rune, frag:P.frag };
+  }
+  var dead=(boss.state==='dead'), awake=(boss.state==='awake');
+  var B={ x:x,y:y,w:w,h:h, dead:dead, awake:awake,
+    dp:dead?Math.min(1,Math.max(0,(boss._deathT||0)/(boss._deathTime||2.0))):0,
+    mouth:Math.max(0,Math.min(1,boss._mouth||0)) };
+  var G=_bossHeadGeom(B,{});
+  var st=dead?'dead':(awake?'awake':'dormant');
+  var mo=B.mouth;
+  (V.arms||_bossArms)(g,B,P,now,{});
+  (V.torso||_bossTorso)(g,B,P,now,{});
+  (V.armor||_bossDefArmor)(g,B,G,P,now,st);
+  (V.horns||_bossDefHorns)(g,B,G,P,now);
+  (V.head||_bossHeadRows)(g,B,G,P,{});
+  (V.eyes||_bossDefEyes)(g,B,G,P,now,st);
+  (V.mouth||_bossDefMouth)(g,B,G,P,now,st,mo);
+  if(V.extras) V.extras(g,B,G,P,now,st);
 }
 
 function drawBossHpBar(g, W, H, boss){
@@ -9386,6 +11309,7 @@ function makeBoss(el){
   return {
     id:(el.id!==undefined?el.id:''),
     x:el.x,y:el.y,w:el.w||160,h:el.h||120,
+    style:(el.style||'inferno'),          /* ★BOSS 造型 id★（缺省 = 原版恶魔） */
     state:'dormant',hp:(el.maxHp!==undefined?el.maxHp:12),maxHp:(el.maxHp!==undefined?el.maxHp:12),
     activeRadius:(el.activeRadius!==undefined?el.activeRadius:96),
     sleepDelay:(el.sleepDelay!==undefined?el.sleepDelay:4),
